@@ -2,7 +2,7 @@ import { Game } from "../hooka/useGames";
 import { Card, Image, CardBody, Heading, HStack } from "@chakra-ui/react";
 import CriticScore from "./CriticScore";
 import getCroppedImageUrl from "../services/image-url";
-import PlatformIconList from "./PlatformIconList";
+import PlatformIconList from "./platformIconList";
 
 interface Props {
   game: Game;
