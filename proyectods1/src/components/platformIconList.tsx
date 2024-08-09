@@ -1,5 +1,5 @@
 import { HStack, Icon } from "@chakra-ui/react";
-import { Platform } from "../hooka/useGames";
+import { Platform } from "../hooks/useGames";
 import {
   FaWindows,
   FaPlaystation,
@@ -17,7 +17,7 @@ interface Props {
   platforms: Platform[];
 }
 
-const platformIconList = ({ platforms }: Props) => {
+const PlatformIconList = ({ platforms }: Props) => {
   const iconMap: { [key: string]: IconType } = {
     pc: FaWindows,
     playstation: FaPlaystation,
@@ -39,4 +39,4 @@ const platformIconList = ({ platforms }: Props) => {
   );
 };
 
-export default platformIconList;
+export default PlatformIconList;

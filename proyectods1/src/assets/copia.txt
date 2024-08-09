@@ -1,0 +1,26 @@
+<Modal isOpen={isOpen} onClose={onClose} isCentered>
+      <ModalOverlay />
+
+      <ModalContent>
+        <HStack padding="10px">
+          <Heading fontSize={18} marginBlock="8px">
+            {game.name}
+          </Heading>
+          <ModalCloseButton as={IoIosCloseCircle} boxSize="30px" />
+        </HStack>
+
+        <ModalBody>
+          <Box padding={1}>
+            <Image src={getCroppedImageUrl(game.background_image)} />
+            <Heading>{game.name}</Heading>
+            <HStack justifyContent="space-between" marginBottom={3}>
+              <PlatformIconList
+                platforms={game.parent_platforms?.map((p) => p.platform)}
+              />
+              <CriticScore score={game.metacritic} />
+            </HStack>
+            {/* Aquí puedes agregar más detalles del juego si lo deseas */}
+          </Box>
+        </ModalBody>
+      </ModalContent>
+    </Modal>
