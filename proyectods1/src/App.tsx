@@ -21,6 +21,7 @@ function App() {
 
   return (
     <Grid
+    //<h1>You are currently logged in.</h1>
       templateAreas={{
         base: '"nav" "main"',
         lg: '"nav nav" "aside main"',
