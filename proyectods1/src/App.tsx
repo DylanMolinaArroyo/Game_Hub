@@ -21,9 +21,9 @@ function App() {
 
   return (
 
-    <h1>You are currently logged in.</h1>
+    //<h1>You are currently logged in.</h1>
 
-    /*<Grid
+    <Grid
     //<h1>You are currently logged in.</h1>
       templateAreas={{
         base: '"nav" "main"',
@@ -70,7 +70,7 @@ function App() {
         </Box>
         <GameGrid gameQuery={gameQuery} />
       </GridItem>
-    </Grid>*/
+    </Grid>
   );
 }
 
