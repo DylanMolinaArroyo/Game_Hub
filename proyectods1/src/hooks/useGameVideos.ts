@@ -2,33 +2,17 @@ import { useEffect, useState } from "react";
 import apiClient from "../services/api-client";
 import { CanceledError, AxiosRequestConfig } from "axios";
 
-export interface Platform {
+export interface Trailer {
   id: number;
   name: string;
-  description: string;
-  slug: string;
+  preview: string;
+  data: {
+    max: string;
+  };
 }
 
-export interface Developer {
-  id: number;
-  name: string;
-  slug: string;
-}
-
-export interface GameProfile {
-  id: number;
-  name: string;
-  background_image: string;
-  parent_platforms: { platform: Platform }[];
-  developers: Developer[]; // Aquí cambié a un array de Developer en lugar de un objeto
-  metacritic: number;
-  description: string;
-  playtime: number;
-  released: string;
-}
-
-const useGameProfile = (gameId: number, requestConfig?: AxiosRequestConfig) => {
-  const [data, setData] = useState<GameProfile | null>(null);
+const useGameVideos = (gameId: number, requestConfig?: AxiosRequestConfig) => {
+  const [data, setData] = useState<Trailer[] | null>(null);
   const [error, setError] = useState("");
   const [isLoading, setLoading] = useState(false);
 
@@ -37,12 +21,12 @@ const useGameProfile = (gameId: number, requestConfig?: AxiosRequestConfig) => {
 
     setLoading(true);
     apiClient
-      .get<GameProfile>(`/games/${gameId}`, {
+      .get<{ results: Trailer[] }>(`/games/${gameId}/movies?lang=en`, {
         signal: controller.signal,
         ...requestConfig,
       })
       .then((res) => {
-        setData(res.data);
+        setData(res.data.results);
         setLoading(false);
       })
       .catch((err) => {
@@ -57,4 +41,4 @@ const useGameProfile = (gameId: number, requestConfig?: AxiosRequestConfig) => {
   return { data, error, isLoading };
 };
 
-export default useGameProfile;
+export default useGameVideos;

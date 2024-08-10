@@ -1,6 +1,13 @@
 import { useState } from "react";
 import { Game } from "../hooks/useGames";
-import { Card, Image, CardBody, HStack, Button } from "@chakra-ui/react";
+import {
+  Card,
+  Image,
+  CardBody,
+  HStack,
+  Button,
+  useColorModeValue,
+} from "@chakra-ui/react";
 import PlatformIconList from "./PlatformIconList";
 import CriticScore from "./CriticScore";
 import getCroppedImageUrl from "../services/image-url";
@@ -14,6 +21,7 @@ const GameCard = ({ game }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const handleOpen = () => setIsOpen(true);
   const handleClose = () => setIsOpen(false);
+  const headingColor = useColorModeValue("gray.700", "whiteAlpha.900");
 
   return (
     <>
@@ -23,6 +31,7 @@ const GameCard = ({ game }: Props) => {
           <HStack justifyContent="space-between" marginBottom={3}>
             <PlatformIconList
               platforms={game.parent_platforms?.map((p) => p.platform)}
+              showName={false}
             />
             <CriticScore score={game.metacritic} />
           </HStack>
@@ -33,7 +42,7 @@ const GameCard = ({ game }: Props) => {
             fontSize="2xl"
             fontWeight="bold"
             variant="link"
-            color="white"
+            color={headingColor}
           >
             {game.name}
           </Button>
