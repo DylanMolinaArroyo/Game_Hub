@@ -2,9 +2,13 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
 import App from "./App.tsx";
+import Login from "./Login.tsx";
+import Signup from './Signup.tsx'
+import './index.css'
 import theme from "./theme.ts";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { initializeApp } from "firebase/app";
+import AuthRoute from './AuthRoute.tsx'
 
 const firebaseConfig = {
   apiKey: "AIzaSyCc5EtpwBZRqHmv7g7R41plJGcrU18kf04",
@@ -24,8 +28,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <ColorModeScript initialColorMode={theme.config.InitialColorMode} />
       <Router>
         <Routes>
-          <Route path = "/" element = {<App />} />
-          <Route path = "/" element = {<Navigate to="/" />} />
+          <Route path="/" element={<AuthRoute><App /></AuthRoute>} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Router>
     </ChakraProvider>
