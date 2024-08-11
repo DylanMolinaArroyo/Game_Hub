@@ -25,6 +25,7 @@ export interface GameProfile {
   description: string;
   playtime: number;
   released: string;
+  website: string;
 }
 
 type RefetchFunction = () => Promise<void>;
