@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState, useCallback } from "react";
 import apiClient from "../services/api-client";
 import { CanceledError, AxiosRequestConfig } from "axios";
 
@@ -11,18 +11,17 @@ export interface Trailer {
   };
 }
 
+type RefetchFunction = () => Promise<void>;
+
 const useGameVideos = (gameId: number, requestConfig?: AxiosRequestConfig) => {
   const [data, setData] = useState<Trailer[] | null>(null);
   const [error, setError] = useState("");
   const [isLoading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const controller = new AbortController();
-
+  const fetchData = useCallback(() => {
     setLoading(true);
-    apiClient
-      .get<{ results: Trailer[] }>(`/games/${gameId}/movies?lang=en`, {
-        signal: controller.signal,
+    return apiClient
+      .get<{ results: Trailer[] }>(`/games/${gameId}/movies`, {
         ...requestConfig,
       })
       .then((res) => {
@@ -34,11 +33,11 @@ const useGameVideos = (gameId: number, requestConfig?: AxiosRequestConfig) => {
         setError(err.message);
         setLoading(false);
       });
-
-    return () => controller.abort();
   }, [gameId, requestConfig]);
 
-  return { data, error, isLoading };
+  const refetch: RefetchFunction = () => fetchData();
+
+  return { data, error, isLoading, refetch };
 };
 
 export default useGameVideos;

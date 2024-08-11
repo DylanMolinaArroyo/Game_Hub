@@ -20,16 +20,20 @@ import {
   Stat,
   StatNumber,
   StatLabel,
+  Icon,
+  Card,
 } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import useGameProfile from "../hooks/useGameProfile";
-import { IoIosCloseCircle } from "react-icons/io";
 import getCroppedImageUrl from "../services/image-url";
 import PlatformIconList from "./PlatformIconList";
 import CriticScoreExpand from "./CriticScoreExpand";
 import CleanDescription from "./CleanDescription";
 import DeveloperList from "./DevelopersList";
 import useGameVideos from "../hooks/useGameVideos";
-
+import useGameImages from "../hooks/useGamesImages";
+import { MdAccessTime } from "react-icons/md";
+import GameModalSkeleton from "./GameModalSkeleton";
 interface Props {
   isOpen: boolean;
   onClose: () => void;
@@ -37,22 +41,47 @@ interface Props {
 }
 
 const GameModal = ({ isOpen, onClose, gameId }: Props) => {
-  const { data: gameProfile, error, isLoading } = useGameProfile(gameId);
-  const { data: gameVideos } = useGameVideos(gameId);
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
+  const [selectedMedia, setSelectedMedia] = useState<string | null>(null);
+  const {
+    data: gameProfile,
+    error,
+    isLoading,
+    refetch: refetchProfile,
+  } = useGameProfile(gameId);
+  const { data: gameVideos, refetch: refetchVideos } = useGameVideos(gameId);
+  const { data: gameImages, refetch: refretchImages } = useGameImages(gameId);
 
   const modalBg = useColorModeValue("gray.50", "gray.800");
   const headingColor = useColorModeValue("gray.700", "whiteAlpha.900");
+  const closeButtonColor = useColorModeValue(
+    "blackAlpha.700",
+    "whiteAlpha.900"
+  );
+
+  useEffect(() => {
+    if (isOpen && !isDataLoaded) {
+      refetchProfile();
+      refetchVideos();
+      refretchImages();
+      setIsDataLoaded(true);
+    }
+  }, [isOpen, isDataLoaded, refetchProfile, refetchVideos]);
+
+  useEffect(() => {
+    if (gameProfile?.background_image) {
+      setSelectedMedia(getCroppedImageUrl(gameProfile.background_image));
+    }
+  }, [gameProfile]);
 
   if (isLoading) {
     return (
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
-        <ModalOverlay />
-        <ModalContent bg={modalBg}>
-          <ModalBody display="flex" justifyContent="center" alignItems="center">
-            <Spinner size="xl" />
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+      <GameModalSkeleton
+        isOpen={true}
+        onClose={function (): void {
+          throw new Error("Function not implemented.");
+        }}
+      />
     );
   }
 
@@ -69,6 +98,10 @@ const GameModal = ({ isOpen, onClose, gameId }: Props) => {
     );
   }
 
+  const limitedVideos = gameVideos?.slice(0, 2) || [];
+  const limitedImages =
+    gameImages?.slice(0, limitedVideos.length > 0 ? 8 : 12) || [];
+
   return (
     <ScaleFade initialScale={0.9} in={isOpen}>
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
@@ -79,98 +112,167 @@ const GameModal = ({ isOpen, onClose, gameId }: Props) => {
           borderRadius="md"
           overflow="hidden"
         >
-          <HStack padding={4} bg="normal" color="normal">
-            <Heading fontSize="lg" fontWeight="bold">
-              {gameProfile.name}
-            </Heading>
-            <ModalCloseButton as={IoIosCloseCircle} boxSize="30px" />
-          </HStack>
           <ModalBody padding={2}>
-            <Grid templateColumns="repeat(2, 1fr)" gap={4}>
-              <GridItem>
-                <Image
-                  borderRadius="md"
-                  src={getCroppedImageUrl(gameProfile.background_image)}
-                  alt={gameProfile.name}
-                  objectFit="cover"
-                  maxHeight="400px"
-                />
-              </GridItem>
-              <GridItem>
-                <Heading size="lg">{gameProfile.name}</Heading>
-                <Center height="20px">
-                  <Divider orientation="horizontal" color="white" />
-                </Center>
-                <Grid templateColumns="repeat(2, 1fr)" gap={4}>
-                  <GridItem>
-                    <CriticScoreExpand score={gameProfile.metacritic} />
-                  </GridItem>
-                  <GridItem>
-                    <Stat>
-                      <StatLabel fontSize={20}>Play Time</StatLabel>
-                      <StatNumber>{gameProfile.playtime} Hours</StatNumber>
-                    </Stat>
-                  </GridItem>
-                </Grid>
-                <HStack marginBottom={2} marginTop={2}>
-                  <Heading size="md" color={headingColor}>
-                    Release Date:
-                  </Heading>
-                  <Text fontSize="18px" color={headingColor}>
-                    {gameProfile.released}
-                  </Text>
-                </HStack>
-
-                <Heading
-                  size="md"
-                  color={headingColor}
-                  marginBottom={2}
-                  marginTop={4}
-                >
-                  Developers
-                </Heading>
-                <DeveloperList
-                  developers={gameProfile.developers}
-                ></DeveloperList>
-              </GridItem>
-            </Grid>
-            <Heading
-              size="md"
+            <HStack
+              padding={4}
+              bg="normal"
               color={headingColor}
-              marginBottom={2}
-              marginTop={4}
+              marginBottom={1}
             >
+              <Heading fontSize="lg" fontWeight="normal">
+                {gameProfile.name}
+              </Heading>
+              <ModalCloseButton
+                color={closeButtonColor}
+                _hover={{ color: "red.500" }}
+                size="lg"
+              />
+            </HStack>
+            <Card padding={3} marginBottom={4}>
+              <Grid templateColumns="repeat(2, 1fr)" gap={4}>
+                <GridItem>
+                  <Image
+                    borderRadius="md"
+                    src={getCroppedImageUrl(gameProfile.background_image)}
+                    alt={gameProfile.name}
+                    objectFit="cover"
+                    maxHeight="400px"
+                  />
+                </GridItem>
+                <GridItem>
+                  <Heading size="lg">{gameProfile.name}</Heading>
+                  <Center height="20px">
+                    <Divider
+                      orientation="horizontal"
+                      borderWidth="2px"
+                      width="full"
+                      color={headingColor}
+                    />
+                  </Center>
+                  <Grid templateColumns="repeat(2, 1fr)" gap={4}>
+                    <GridItem>
+                      <CriticScoreExpand score={gameProfile.metacritic} />
+                    </GridItem>
+                    <GridItem>
+                      <Stat>
+                        <StatLabel fontSize={20}>Play Time</StatLabel>
+                        <StatNumber>
+                          <Icon as={MdAccessTime} size={"30px"} />{" "}
+                          {gameProfile.playtime} Hours
+                        </StatNumber>
+                      </Stat>
+                    </GridItem>
+                  </Grid>
+                  <HStack marginBottom={2} marginTop={2}>
+                    <Heading size="md" color={headingColor}>
+                      Release Date:
+                    </Heading>
+                    <Text fontSize="18px" color={headingColor}>
+                      {gameProfile.released}
+                    </Text>
+                  </HStack>
+
+                  <Heading
+                    size="md"
+                    color={headingColor}
+                    marginBottom={2}
+                    marginTop={4}
+                  >
+                    Developers
+                  </Heading>
+                  <DeveloperList
+                    developers={gameProfile.developers}
+                  ></DeveloperList>
+                </GridItem>
+              </Grid>
+            </Card>
+
+            <Heading size="md" color={headingColor} marginBottom={2}>
               Platforms
             </Heading>
             <PlatformIconList
               platforms={gameProfile.parent_platforms?.map((p) => p.platform)}
               showName={true}
             />
-            <HStack>
-              <Box>
-                {gameVideos?.map((trailer) => (
-                  <Box key={trailer.id} marginBottom={4}>
-                    <video controls width="100%">
-                      <source src={trailer.data.max} type="video/mp4" />
-                      Your browser does not support the video tag.
-                    </video>
-                  </Box>
+
+            <Center height="20px">
+              <Divider
+                orientation="horizontal"
+                borderWidth="2px"
+                width="full"
+                color={headingColor}
+              />
+            </Center>
+            <GridItem colSpan={2}>
+              {selectedMedia?.endsWith(".mp4") ? (
+                <video controls width="100%" src={selectedMedia} />
+              ) : (
+                <Image
+                  borderRadius="md"
+                  src={selectedMedia || ""}
+                  alt={gameProfile.name}
+                  objectFit="cover"
+                  maxHeight="400px"
+                  width="100%"
+                />
+              )}
+            </GridItem>
+            <HStack
+              overflowX="scroll"
+              overscrollBehaviorX="revert"
+              paddingY={4}
+            >
+              <HStack paddingX={"10px"}>
+                {limitedVideos?.map((trailer) => (
+                  <Image
+                    key={trailer.id}
+                    src={trailer.preview}
+                    width="150px"
+                    height="auto"
+                    objectFit="cover"
+                    cursor="pointer"
+                    onClick={() => setSelectedMedia(trailer.data.max)}
+                    marginX={2}
+                  />
                 ))}
-              </Box>
+                {limitedImages?.map((image, index) => (
+                  <Image
+                    key={index}
+                    src={image.image}
+                    width="150px"
+                    height="auto"
+                    objectFit="cover"
+                    cursor="pointer"
+                    onClick={() => setSelectedMedia(image.image)}
+                    marginX={2}
+                  />
+                ))}
+              </HStack>
             </HStack>
             <VStack spacing={4} align="stretch" marginTop={4}>
-              <Divider orientation="horizontal" />
+              <Center height="20px">
+                <Divider
+                  orientation="horizontal"
+                  borderWidth="2px"
+                  width="full"
+                  color={headingColor}
+                />
+              </Center>{" "}
               <Box>
                 <Heading size="md" color={headingColor} marginBottom={2}>
                   Description
                 </Heading>
-                <Text>
+                <Text textAlign="justify">
                   <CleanDescription
                     description={gameProfile.description}
                   ></CleanDescription>
                 </Text>
               </Box>
-              <Divider orientation="horizontal" />
+              <Divider
+                orientation="horizontal"
+                borderWidth="2px"
+                width="full"
+              />
             </VStack>
           </ModalBody>
         </ModalContent>

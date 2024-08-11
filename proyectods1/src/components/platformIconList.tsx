@@ -19,7 +19,6 @@ interface Props {
 }
 
 const PlatformIconList = ({ platforms, showName }: Props) => {
-  // Mapa de iconos
   const iconMap: { [key: string]: IconType } = {
     pc: FaWindows,
     playstation: FaPlaystation,
@@ -32,7 +31,6 @@ const PlatformIconList = ({ platforms, showName }: Props) => {
     web: BsGlobe,
   };
 
-  // Mapa de colores
   const colorMap: { [key: string]: string } = {
     pc: "blue.500",
     playstation: "blue.700",

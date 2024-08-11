@@ -7,6 +7,7 @@ import {
   HStack,
   Button,
   useColorModeValue,
+  Fade,
 } from "@chakra-ui/react";
 import PlatformIconList from "./PlatformIconList";
 import CriticScore from "./CriticScore";
@@ -19,6 +20,7 @@ interface Props {
 
 const GameCard = ({ game }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isImageLoaded, setIsImageLoaded] = useState(false); // Estado para manejar la carga de la imagen
   const handleOpen = () => setIsOpen(true);
   const handleClose = () => setIsOpen(false);
   const headingColor = useColorModeValue("gray.700", "whiteAlpha.900");
@@ -26,7 +28,13 @@ const GameCard = ({ game }: Props) => {
   return (
     <>
       <Card>
-        <Image src={getCroppedImageUrl(game.background_image)} />
+        <Fade in={isImageLoaded}>
+          <Image
+            src={getCroppedImageUrl(game.background_image)}
+            onLoad={() => setIsImageLoaded(true)}
+          />
+        </Fade>
+
         <CardBody>
           <HStack justifyContent="space-between" marginBottom={3}>
             <PlatformIconList
@@ -49,7 +57,9 @@ const GameCard = ({ game }: Props) => {
         </CardBody>
       </Card>
 
-      <GameModal isOpen={isOpen} onClose={handleClose} gameId={game.id} />
+      {isOpen && (
+        <GameModal isOpen={isOpen} onClose={handleClose} gameId={game.id} />
+      )}
     </>
   );
 };

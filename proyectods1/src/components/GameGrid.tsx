@@ -11,7 +11,7 @@ interface Props {
 
 const GameGrid = ({ gameQuery }: Props) => {
   const { data, error, isLoading } = useGames(gameQuery);
-  const skeletons = [1, 2, 3, 4, 5, 6];
+  const skeletonCount = isLoading ? Array(20).fill(null) : [];
 
   if (error) return <Text>{error}</Text>;
 
@@ -22,9 +22,8 @@ const GameGrid = ({ gameQuery }: Props) => {
       spacing={6}
     >
       {isLoading &&
-        skeletons.map((Skeleton) => (
-          <GameCardContainer key={Skeleton}>
-            {" "}
+        skeletonCount.map((_, index) => (
+          <GameCardContainer key={index}>
             <GameCardSkeleton />
           </GameCardContainer>
         ))}
