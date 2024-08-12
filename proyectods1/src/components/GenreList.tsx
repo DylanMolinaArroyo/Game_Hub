@@ -7,9 +7,9 @@ import {
   Image,
   Heading,
 } from "@chakra-ui/react";
-import useGenres from "../hooka/useGenres";
+import useGenres from "../hooks/useGenres";
 import getCroppedImageUrl from "../services/image-url";
-import { Genre } from "../hooka/useGenres";
+import { Genre } from "../hooks/useGenres";
 
 interface Props {
   onSelectGenre: (genre: Genre) => void;
@@ -45,7 +45,6 @@ const GenreList = ({ selectedGenre, onSelectGenre }: Props) => {
                 onClick={() => onSelectGenre(genre)}
                 fontSize="md"
                 variant="link"
-                //color={genre.id === selectedGenre?.id ? "white" : "black"}
               >
                 {genre.name}
               </Button>

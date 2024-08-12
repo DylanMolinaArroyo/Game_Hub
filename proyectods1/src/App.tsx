@@ -3,11 +3,12 @@ import NavBar from "./components/NavBar";
 import GameGrid from "./components/GameGrid";
 import GenreList from "./components/GenreList";
 import { useState } from "react";
-import { Genre } from "./hooka/useGenres";
+import { Genre } from "./hooks/useGenres";
 import PlatformSelector from "./components/PlatformSelector";
-import { Platform } from "./hooka/useGames";
+import { Platform } from "./hooks/useGames";
 import SortSelector from "./components/SortSelector";
 import GameHeading from "./components/GameHeading";
+import ClearFiltersButton from "./components/ClearFiltersButton";
 
 export interface GameQuery {
   genre: Genre | null;
@@ -18,6 +19,22 @@ export interface GameQuery {
 
 function App() {
   const [gameQuery, setGameQuery] = useState<GameQuery>({} as GameQuery);
+
+  const handleClearFilters = () => {
+    setGameQuery({
+      genre: null,
+      platform: null,
+      sortOrder: "",
+      searchText: "",
+    });
+  };
+
+  // Check if any filter is applied
+  const isFilterApplied =
+    gameQuery.genre ||
+    gameQuery.platform ||
+    gameQuery.sortOrder ||
+    gameQuery.searchText;
 
   return (
 
@@ -51,7 +68,7 @@ function App() {
       <GridItem area="main">
         <Box paddingLeft={2}>
           <GameHeading gameQuery={gameQuery} />
-          <Flex marginBottom={5}>
+          <Flex marginBottom={5} position="relative">
             <Box marginRight={5}>
               <PlatformSelector
                 selectedPlatform={gameQuery.platform}
@@ -66,6 +83,11 @@ function App() {
                 setGameQuery({ ...gameQuery, sortOrder })
               }
             />
+            {isFilterApplied && (
+              <Box marginLeft={1110} position="absolute">
+                <ClearFiltersButton onClick={handleClearFilters} />
+              </Box>
+            )}
           </Flex>
         </Box>
         <GameGrid gameQuery={gameQuery} />
