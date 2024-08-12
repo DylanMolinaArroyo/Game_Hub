@@ -3,6 +3,7 @@ import ColorModeSwitch from "./ColorModeSwitch";
 import SearchInput from "./SearchInput";
 import { GiArchiveResearch } from "react-icons/gi";
 import LogoutButton from "./Logout"; 
+import RightDrawer from "./RightDrawer";
 
 interface Props {
   onSearch: (searchText: string) => void;
@@ -14,7 +15,7 @@ const NavBar = ({ onSearch }: Props) => {
       <Icon as={GiArchiveResearch} boxSize="60px" />
       <SearchInput onSearch={onSearch} />
       <ColorModeSwitch />
-      <PlatformIconList />
+      <RightDrawer />
       <LogoutButton /> 
     </HStack>
   );

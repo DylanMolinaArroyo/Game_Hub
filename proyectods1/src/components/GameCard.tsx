@@ -12,7 +12,8 @@ import {
 import PlatformIconList from "./PlatformIconList";
 import CriticScore from "./CriticScore";
 import getCroppedImageUrl from "../services/image-url";
-import PlatformIconList from "./PlatformIconList";
+//import PlatformIconList from "./platformIconList";
+import GameModal from "./GameModal";
 
 interface Props {
   game: Game;
