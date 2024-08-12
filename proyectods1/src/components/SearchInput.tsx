@@ -24,6 +24,7 @@ const SearchInput = ({ onSearch }: Props) => {
           borderRadius={20}
           placeholder="Search games..."
           variant="filled"
+          onChange={(event) => onSearch(event.target.value)}
         />
       </InputGroup>
     </form>

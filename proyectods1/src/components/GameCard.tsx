@@ -24,6 +24,7 @@ const GameCard = ({ game }: Props) => {
   const handleOpen = () => setIsOpen(true);
   const handleClose = () => setIsOpen(false);
   const headingColor = useColorModeValue("gray.700", "whiteAlpha.900");
+  const headingColor2 = useColorModeValue("#ededed", "#202020");
 
   return (
     <>
@@ -35,7 +36,7 @@ const GameCard = ({ game }: Props) => {
           />
         </Fade>
 
-        <CardBody>
+        <CardBody backgroundColor={headingColor2}>
           <HStack justifyContent="space-between" marginBottom={3}>
             <PlatformIconList
               platforms={game.parent_platforms?.map((p) => p.platform)}
