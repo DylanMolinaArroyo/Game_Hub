@@ -2,7 +2,7 @@ import { HStack, Icon } from "@chakra-ui/react";
 import ColorModeSwitch from "./ColorModeSwitch";
 import SearchInput from "./SearchInput";
 import { GiArchiveResearch } from "react-icons/gi";
-import LogoutButton from "./Logout"; 
+import LogoutButton from "./Logout";
 import RightDrawer from "./RightDrawer";
 
 interface Props {
@@ -16,11 +16,9 @@ const NavBar = ({ onSearch }: Props) => {
       <SearchInput onSearch={onSearch} />
       <ColorModeSwitch />
       <RightDrawer />
-      <LogoutButton /> 
+      <LogoutButton />
     </HStack>
   );
 };
 
 export default NavBar;
-
-

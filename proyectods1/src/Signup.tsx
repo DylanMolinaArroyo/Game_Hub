@@ -1,134 +1,185 @@
-import { useState } from 'react';
-import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import {
+  Box,
+  Button,
+  Center,
+  Divider,
+  Heading,
+  Icon,
+  Input,
+  Stack,
+  Text,
+  useColorModeValue,
+} from "@chakra-ui/react";
+import { FcGoogle } from "react-icons/fc";
 
-const Signup = () => {
-    // Initialize Firebase authentication and navigation
-    const auth = getAuth();
-    const navigate = useNavigate();
-    
-    // State variables for managing authentication state, email, password, confirm password, and error messages
-    const [authing, setAuthing] = useState(false);
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [error, setError] = useState('');
+function Signup() {
+  const headingColor = useColorModeValue("gray.700", "whiteAlpha.900");
 
-    // Function to handle sign-up with Google
-    const signUpWithGoogle = async () => {
-        setAuthing(true);
-        
-        // Use Firebase to sign up with Google
-        signInWithPopup(auth, new GoogleAuthProvider())
-            .then(response => {
-                console.log(response.user.uid);
-                navigate('/');
-            })
-            .catch(error => {
-                console.log(error);
-                setAuthing(false);
-            });
-    };
+  const auth = getAuth();
+  const navigate = useNavigate();
 
-    // Function to handle sign-up with email and password
-    const signUpWithEmail = async () => {
-        // Check if passwords match
-        if (password !== confirmPassword) {
-            setError('Passwords do not match');
-            return;
-        }
+  const [authing, setAuthing] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
 
-        setAuthing(true);
-        setError('');
+  const signUpWithGoogle = async () => {
+    setAuthing(true);
 
-        // Use Firebase to create a new user with email and password
-        createUserWithEmailAndPassword(auth, email, password)
-            .then(response => {
-                console.log(response.user.uid);
-                navigate('/');
-            })
-            .catch(error => {
-                console.log(error);
-                setError(error.message);
-                setAuthing(false);
-            });
-    };
+    signInWithPopup(auth, new GoogleAuthProvider())
+      .then((response) => {
+        console.log(response.user.uid);
+        navigate("/");
+      })
+      .catch((error) => {
+        console.log(error);
+        setAuthing(false);
+      });
+  };
 
-    return (
-        <div className='w-full h-screen flex'>
-            {/* Left half of the screen - background styling */}
-            <div className='w-1/2 h-full flex flex-col bg-[#282c34] items-center justify-center'>
-            </div>
+  const signUpWithEmail = async () => {
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
 
-            {/* Right half of the screen - signup form */}
-            <div className='w-1/2 h-full bg-[#1a1a1a] flex flex-col p-20 justify-center'>
-                <div className='w-full flex flex-col max-w-[450px] mx-auto'>
-                    {/* Header section with title and welcome message */}
-                    <div className='w-full flex flex-col mb-10 text-white'>
-                        <h3 className='text-4xl font-bold mb-2'>Sign Up</h3>
-                        <p className='text-lg mb-4'>Welcome! Please enter your information below to begin.</p>
-                    </div>
+    setAuthing(true);
+    setError("");
 
-                    {/* Input fields for email, password, and confirm password */}
-                    <div className='w-full flex flex-col mb-6'>
-                        <input
-                            type='email'
-                            placeholder='Email'
-                            className='w-full text-white py-2 mb-4 bg-transparent border-b border-gray-500 focus:outline-none focus:border-white'
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                        <input
-                            type='password'
-                            placeholder='Password'
-                            className='w-full text-white py-2 mb-4 bg-transparent border-b border-gray-500 focus:outline-none focus:border-white'
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                        <input
-                            type='password'
-                            placeholder='Re-Enter Password'
-                            className='w-full text-white py-2 mb-4 bg-transparent border-b border-gray-500 focus:outline-none focus:border-white'
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                        />
-                    </div>
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((response) => {
+        console.log(response.user.uid);
+        navigate("/");
+      })
+      .catch((error) => {
+        console.log(error);
+        setError(error.message);
+        setAuthing(false);
+      });
+  };
 
-                    {/* Display error message if there is one */}
-                    {error && <div className='text-red-500 mb-4'>{error}</div>}
+  return (
+    <Box
+      minH="100vh"
+      bgImage="../src/assets/gameCatalog.webp"
+      bgSize="cover"
+      bgPosition="center"
+    >
+      <Center h="100vh">
+        <Box
+          w="50%"
+          bg="#1a1a1a"
+          p={10}
+          flexDirection="column"
+          justifyContent="center"
+          borderRadius={15}
+          maxW="400px"
+        >
+          <Box maxW="300px" mx="auto">
+            <Heading
+              as="h3"
+              size="xl"
+              mb={2}
+              color={headingColor}
+              textAlign="center"
+            >
+              Sign Up
+            </Heading>
+            <Text fontSize="md" mb={4} textAlign="center">
+              Welcome! Please enter your information below to begin.
+            </Text>
 
-                    {/* Button to sign up with email and password */}
-                    <div className='w-full flex flex-col mb-4'>
-                        <button
-                            onClick={signUpWithEmail}
-                            disabled={authing}
-                            className='w-full bg-transparent border border-white text-white my-2 font-semibold rounded-md p-4 text-center flex items-center justify-center cursor-pointer'>
-                            Sign Up With Email and Password
-                        </button>
-                    </div>
+            <Stack spacing={2} mb={4}>
+              <Input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                variant="flushed"
+                focusBorderColor="white"
+              />
+              <Input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                variant="flushed"
+                focusBorderColor="white"
+              />
+              <Input
+                type="password"
+                placeholder="Re-Enter Password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                variant="flushed"
+                focusBorderColor="white"
+              />
+            </Stack>
 
-                    {/* Divider with 'OR' text */}
-                    <div className='w-full flex items-center justify-center relative py-4'>
-                        <div className='w-full h-[1px] bg-gray-500'></div>
-                        <p className='text-lg absolute text-gray-500 bg-[#1a1a1a] px-2'>OR</p>
-                    </div>
+            {error && (
+              <Text color="red.500" mb={4} textAlign="center">
+                {error}
+              </Text>
+            )}
 
-                    {/* Button to sign up with Google */}
-                    <button
-                        onClick={signUpWithGoogle}
-                        disabled={authing}
-                        className='w-full bg-white text-black font-semibold rounded-md p-4 text-center flex items-center justify-center cursor-pointer mt-7'>
-                        Sign Up With Google
-                    </button>
-                </div>
+            <Button
+              onClick={signUpWithEmail}
+              isLoading={authing}
+              color={headingColor}
+              w="100%"
+              mb={1}
+            >
+              Sign Up With Email and Password
+            </Button>
 
-                {/* Link to login page */}
-                <div className='w-full flex items-center justify-center mt-10'>
-                    <p className='text-sm font-normal text-gray-400'>Already have an account? <span className='font-semibold text-white cursor-pointer underline'><a href='/login'>Log In</a></span></p>
-                </div>
-            </div>
-        </div>
-    );
+            <Center my={4}>
+              <Divider borderColor="gray.500" />
+              <Text fontSize="lg" color="gray.500" mx={2} bg="#1a1a1a">
+                OR
+              </Text>
+              <Divider borderColor="gray.500" />
+            </Center>
+
+            <Button
+              colorScheme="whiteAlpha"
+              bg="white"
+              color="black"
+              onClick={signUpWithGoogle}
+              isLoading={authing}
+              w="100%"
+            >
+              <Icon as={FcGoogle} boxSize={25} />
+              Sign Up With Google
+            </Button>
+
+            <Center mt={10}>
+              <Text fontSize="sm" color="gray.400">
+                Already have an account?{" "}
+                <Text
+                  as="span"
+                  fontWeight="semibold"
+                  color="white"
+                  cursor="pointer"
+                  textDecoration="underline"
+                >
+                  <a href="/login">Log In</a>
+                </Text>
+              </Text>
+            </Center>
+          </Box>
+        </Box>
+      </Center>
+    </Box>
+  );
 }
 
 export default Signup;

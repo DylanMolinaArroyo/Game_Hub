@@ -12,7 +12,6 @@ import {
 import PlatformIconList from "./PlatformIconList";
 import CriticScore from "./CriticScore";
 import getCroppedImageUrl from "../services/image-url";
-//import PlatformIconList from "./platformIconList";
 import GameModal from "./GameModal";
 
 interface Props {
@@ -21,7 +20,7 @@ interface Props {
 
 const GameCard = ({ game }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isImageLoaded, setIsImageLoaded] = useState(false); // Estado para manejar la carga de la imagen
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
   const handleOpen = () => setIsOpen(true);
   const handleClose = () => setIsOpen(false);
   const headingColor = useColorModeValue("gray.700", "whiteAlpha.900");
