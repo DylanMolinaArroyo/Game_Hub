@@ -29,7 +29,7 @@ function App() {
     });
   };
 
-  // Check if any filter is applied
+
   const isFilterApplied =
     gameQuery.genre ||
     gameQuery.platform ||
@@ -38,10 +38,7 @@ function App() {
 
   return (
 
-    //<h1>You are currently logged in.</h1>
-
     <Grid
-    //<h1>You are currently logged in.</h1>
       templateAreas={{
         base: '"nav" "main"',
         lg: '"nav nav" "aside main"',
