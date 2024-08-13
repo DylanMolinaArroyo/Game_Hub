@@ -1,4 +1,15 @@
-import { Box, Flex, Grid, GridItem, Show } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Grid,
+  GridItem,
+  Show,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+} from "@chakra-ui/react";
 import NavBar from "./components/NavBar";
 import GameGrid from "./components/GameGrid";
 import GenreList from "./components/GenreList";
@@ -37,62 +48,76 @@ function App() {
     gameQuery.searchText;
 
   return (
-
     //<h1>You are currently logged in.</h1>
-
-    <Grid
-    //<h1>You are currently logged in.</h1>
-      templateAreas={{
-        base: '"nav" "main"',
-        lg: '"nav nav" "aside main"',
-      }}
-      templateColumns={{
-        base: "1fr",
-        lg: "250px 1fr",
-      }}
-    >
-      <GridItem area="nav">
-        <NavBar
-          onSearch={(searchText) => setGameQuery({ ...gameQuery, searchText })}
-        />
-      </GridItem>
-      <Show above="lg">
-        <GridItem area="aside" paddingX={5}>
-          <GenreList
-            selectedGenre={gameQuery.genre}
-            onSelectGenre={(genre) => setGameQuery({ ...gameQuery, genre })}
+    <>
+      <Grid
+        //<h1>You are currently logged in.</h1>
+        templateAreas={{
+          base: '"nav" "main"',
+          lg: '"nav nav" "aside main"',
+        }}
+        templateColumns={{
+          base: "1fr",
+          lg: "250px 1fr",
+        }}
+      >
+        <GridItem area="nav">
+          <NavBar
+            onSearch={(searchText) =>
+              setGameQuery({ ...gameQuery, searchText })
+            }
           />
         </GridItem>
-      </Show>
-
-      <GridItem area="main">
-        <Box paddingLeft={2}>
-          <GameHeading gameQuery={gameQuery} />
-          <Flex marginBottom={5} position="relative">
-            <Box marginRight={5}>
-              <PlatformSelector
-                selectedPlatform={gameQuery.platform}
-                onSelectPlatform={(platform) =>
-                  setGameQuery({ ...gameQuery, platform })
-                }
-              />
-            </Box>
-            <SortSelector
-              sortOrder={gameQuery.sortOrder}
-              onSelectSortOrder={(sortOrder) =>
-                setGameQuery({ ...gameQuery, sortOrder })
-              }
+        <Show above="lg">
+          <GridItem area="aside" paddingX={5}>
+            <GenreList
+              selectedGenre={gameQuery.genre}
+              onSelectGenre={(genre) => setGameQuery({ ...gameQuery, genre })}
             />
-            {isFilterApplied && (
-              <Box marginLeft={1110} position="absolute">
-                <ClearFiltersButton onClick={handleClearFilters} />
-              </Box>
-            )}
-          </Flex>
-        </Box>
-        <GameGrid gameQuery={gameQuery} />
-      </GridItem>
-    </Grid>
+          </GridItem>
+          <Tabs variant="soft-rounded" colorScheme="green">
+            <TabList>
+              <Tab>Tab 1</Tab>
+              <Tab>Tab 2</Tab>
+            </TabList>
+            <TabPanels>
+              <TabPanel>
+                <GridItem area="main">
+                  <Box paddingLeft={2}>
+                    <GameHeading gameQuery={gameQuery} />
+                    <Flex marginBottom={5} position="relative">
+                      <Box marginRight={5}>
+                        <PlatformSelector
+                          selectedPlatform={gameQuery.platform}
+                          onSelectPlatform={(platform) =>
+                            setGameQuery({ ...gameQuery, platform })
+                          }
+                        />
+                      </Box>
+                      <SortSelector
+                        sortOrder={gameQuery.sortOrder}
+                        onSelectSortOrder={(sortOrder) =>
+                          setGameQuery({ ...gameQuery, sortOrder })
+                        }
+                      />
+                      {isFilterApplied && (
+                        <Box marginLeft={1110} position="absolute">
+                          <ClearFiltersButton onClick={handleClearFilters} />
+                        </Box>
+                      )}
+                    </Flex>
+                  </Box>
+                  <GameGrid gameQuery={gameQuery} />
+                </GridItem>
+              </TabPanel>
+              <TabPanel>
+                <p>two!</p>
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
+        </Show>
+      </Grid>
+    </>
   );
 }
 
