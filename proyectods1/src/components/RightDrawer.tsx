@@ -14,12 +14,11 @@ import {
   useDisclosure,
   Card,
   CardHeader,
-  CardBody,
-  CardFooter,
 } from "@chakra-ui/react";
 import { FaBars } from "react-icons/fa";
 import { getAuth } from "firebase/auth";
 import { useEffect, useState } from "react";
+import LogoutButton from "./Logout";
 
 const RightDrawer = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -49,11 +48,11 @@ const RightDrawer = () => {
 
           <DrawerBody>
             <Card
-              backgroundImage="url('https://fondosmil.co/fondo/3876.jpg')" 
+              backgroundImage="url('https://fondosmil.co/fondo/3876.jpg')"
               backgroundSize="cover"
               backgroundPosition="center"
               backgroundRepeat="no-repeat"
-              color="white" 
+              color="white"
             >
               <CardHeader>
                 <VStack spacing={4} align="center">
@@ -63,16 +62,14 @@ const RightDrawer = () => {
                       {userName}
                     </Text>
                   )}
-                  {userEmail && <Text color="white.300">{userEmail}</Text>} 
+                  {userEmail && <Text color="white.300">{userEmail}</Text>}
                 </VStack>
               </CardHeader>
             </Card>
           </DrawerBody>
 
           <DrawerFooter>
-            <Button variant="outline" mr={3} onClick={onClose}>
-              Close
-            </Button>
+            <LogoutButton />
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
