@@ -8,10 +8,11 @@ import {
 } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { db } from "./services/firebaseConfig";
+import { Game } from "./hooks/useGames";
 
 const auth = getAuth();
 
-export const addToFavorites = async (gameId: string) => {
+export const addToFavorites = async (game: Game) => {
   const user = auth.currentUser;
 
   if (!user) {
@@ -21,20 +22,20 @@ export const addToFavorites = async (gameId: string) => {
 
   const userFavoritesRef = doc(db, "Favorites", user.uid);
   await updateDoc(userFavoritesRef, {
-    games: arrayUnion(gameId),
+    games: arrayUnion(game),
   });
 
   const updatedFavorites = await getFavorites();
   console.log("Updated favorites after adding:", updatedFavorites);
 
-  if (updatedFavorites.includes(gameId)) {
-    console.log(`Game ${gameId} added to favorites successfully!`);
+  if (updatedFavorites.some((favGame: Game) => favGame.id === game.id)) {
+    console.log(`Game ${game.name} added to favorites successfully!`);
   } else {
-    console.log(`Failed to add game ${gameId} to favorites.`);
+    console.log(`Failed to add game ${game.name} to favorites.`);
   }
 };
 
-export const removeFromFavorites = async (gameId: string) => {
+export const removeFromFavorites = async (game: Game) => {
   const user = auth.currentUser;
 
   if (!user) {
@@ -44,20 +45,20 @@ export const removeFromFavorites = async (gameId: string) => {
 
   const userFavoritesRef = doc(db, "Favorites", user.uid);
   await updateDoc(userFavoritesRef, {
-    games: arrayRemove(gameId),
+    games: arrayRemove(game),
   });
 
   const updatedFavorites = await getFavorites();
   console.log("Updated favorites after removing:", updatedFavorites);
 
-  if (!updatedFavorites.includes(gameId)) {
-    console.log(`Game ${gameId} removed from favorites successfully!`);
+  if (!updatedFavorites.some((favGame: Game) => favGame.id === game.id)) {
+    console.log(`Game ${game.name} removed from favorites successfully!`);
   } else {
-    console.log(`Failed to remove game ${gameId} from favorites.`);
+    console.log(`Failed to remove game ${game.name} from favorites.`);
   }
 };
 
-export const getFavorites = async () => {
+export const getFavorites = async (): Promise<Game[]> => {
   if (!auth.currentUser) return [];
 
   const userFavoritesRef = doc(db, "Favorites", auth.currentUser.uid);
