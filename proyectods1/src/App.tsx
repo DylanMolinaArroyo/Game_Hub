@@ -3,6 +3,7 @@ import {
   Flex,
   Grid,
   GridItem,
+  Heading,
   Icon,
   Show,
   Tab,
@@ -57,10 +58,7 @@ function App() {
     gameQuery.searchText;
 
   return (
-    //<h1>You are currently logged in.</h1>
-
     <Grid
-      //<h1>You are currently logged in.</h1>
       templateAreas={{
         base: '"nav" "main"',
         lg: '"nav nav" "aside main"',
@@ -120,12 +118,17 @@ function App() {
                     )}
                   </Flex>
                 </Box>
-                <GameGrid gameQuery={gameQuery} />
+                <GameGrid
+                  gameQuery={gameQuery}
+                  onFavoriteChange={handleFavoriteChange}
+                />
               </GridItem>
             </TabPanel>
             <TabPanel>
-              <FavoritesGrid gameQuery={gameQuery} />
-              Hola
+              <Heading as="h1" marginY={5} fontSize="5xl" paddingLeft={2}>
+                Favorite games
+              </Heading>
+              <FavoritesGrid updateFavorites={handleFavoriteChange} />
             </TabPanel>
           </TabPanels>
         </Tabs>
