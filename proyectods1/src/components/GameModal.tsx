@@ -22,6 +22,7 @@ import {
   Icon,
   Card,
   Link,
+  Button,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import useGameProfile from "../hooks/useGameProfile";
@@ -45,6 +46,7 @@ interface Props {
 const GameModal = ({ isOpen, onClose, gameId }: Props) => {
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [selectedMedia, setSelectedMedia] = useState<string | null>(null);
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const {
     data: gameProfile,
     error,
@@ -72,9 +74,19 @@ const GameModal = ({ isOpen, onClose, gameId }: Props) => {
 
   useEffect(() => {
     if (gameProfile?.background_image) {
-      setSelectedMedia(getCroppedImageUrl(gameProfile.background_image));
+      const firstMedia =
+        gameVideos?.[0]?.data.max ||
+        gameImages?.[0]?.image ||
+        getCroppedImageUrl(gameProfile.background_image);
+      setSelectedMedia(firstMedia);
     }
-  }, [gameProfile]);
+  }, [gameProfile, gameVideos, gameImages]);
+
+  const toggleDescription = () => {
+    setIsDescriptionExpanded(!isDescriptionExpanded);
+  };
+
+  const truncatedDescription = gameProfile?.description.slice(0, 100) + "...";
 
   return (
     <ScaleFade initialScale={0.9} in={isOpen}>
@@ -250,16 +262,28 @@ const GameModal = ({ isOpen, onClose, gameId }: Props) => {
                       width="full"
                       color={headingColor}
                     />
-                  </Center>{" "}
+                  </Center>
                   <Box>
                     <Heading size="md" color={headingColor} marginBottom={2}>
                       Description
                     </Heading>
                     <Text textAlign="justify">
                       <CleanDescription
-                        description={gameProfile.description}
-                      ></CleanDescription>
+                        description={
+                          isDescriptionExpanded
+                            ? gameProfile.description
+                            : truncatedDescription
+                        }
+                      />
                     </Text>
+                    <Button
+                      onClick={toggleDescription}
+                      mt={2}
+                      variant="link"
+                      colorScheme="blue"
+                    >
+                      {isDescriptionExpanded ? "Leer menos" : "Leer más"}
+                    </Button>
                   </Box>
                   <Divider
                     orientation="horizontal"

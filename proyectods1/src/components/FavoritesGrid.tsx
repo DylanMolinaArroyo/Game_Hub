@@ -12,7 +12,7 @@ import GameCardSkeleton from "./GameCardSkeleton";
 import { IoMdHeartDislike } from "react-icons/io";
 
 interface Props {
-  updateFavorites: () => void;
+  updateFavorites: (message: string, status: "success" | "error") => void;
 }
 
 const FavoritesGrid = ({ updateFavorites }: Props) => {
@@ -36,10 +36,11 @@ const FavoritesGrid = ({ updateFavorites }: Props) => {
       setFavoriteGames(
         favoriteGames.filter((favGame) => favGame.id !== game.id)
       );
-      updateFavorites();
+      updateFavorites(`${game.name} removed from favorites!`, "error");
     } else {
       await addToFavorites(game);
       setFavoriteGames([...favoriteGames, game]);
+      updateFavorites(`${game.name} added to favorites!`, "success");
     }
   };
 

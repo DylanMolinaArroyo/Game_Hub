@@ -14,7 +14,7 @@ import { Game } from "../hooks/useGames";
 
 interface Props {
   gameQuery: GameQuery;
-  onFavoriteChange: () => void;
+  onFavoriteChange: (message: string, status: "success" | "error") => void;
 }
 
 const GameGrid = ({ gameQuery, onFavoriteChange }: Props) => {
@@ -37,11 +37,12 @@ const GameGrid = ({ gameQuery, onFavoriteChange }: Props) => {
       setFavoriteGames(
         favoriteGames.filter((favGame) => favGame.id !== game.id)
       );
+      onFavoriteChange(`${game.name} removed from favorites!`, "error");
     } else {
       await addToFavorites(game);
       setFavoriteGames([...favoriteGames, game]);
+      onFavoriteChange(`${game.name} added to favorites!`, "success");
     }
-    onFavoriteChange();
   };
 
   if (error) return <Text>{error}</Text>;

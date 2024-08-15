@@ -1,4 +1,6 @@
 import {
+  Alert,
+  AlertIcon,
   Box,
   Flex,
   Grid,
@@ -6,6 +8,7 @@ import {
   Heading,
   Icon,
   Show,
+  SlideFade,
   Tab,
   TabList,
   TabPanel,
@@ -37,6 +40,10 @@ export interface GameQuery {
 function App() {
   const [gameQuery, setGameQuery] = useState<GameQuery>({} as GameQuery);
   const [, setUpdateKey] = useState(0);
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const [alertStatus, setAlertStatus] = useState<"success" | "error">(
+    "success"
+  );
 
   const handleClearFilters = () => {
     setGameQuery({
@@ -47,8 +54,14 @@ function App() {
     });
   };
 
-  const handleFavoriteChange = () => {
+  const handleFavoriteChange = (
+    message: string,
+    status: "success" | "error"
+  ) => {
     setUpdateKey((prevKey) => prevKey + 1);
+    setAlertMessage(message);
+    setAlertStatus(status);
+    setTimeout(() => setAlertMessage(null), 3000);
   };
 
   const isFilterApplied =
@@ -133,6 +146,23 @@ function App() {
           </TabPanels>
         </Tabs>
       </Show>
+      {alertMessage && (
+        <Box position="fixed" bottom="20px" right="20px" zIndex={1000}>
+          <SlideFade in={!!alertMessage} offsetY="20px">
+            <Alert
+              status={alertStatus}
+              bg={alertStatus === "success" ? "green.500" : "red.500"}
+              color="white"
+              opacity={0.9}
+              borderRadius="md"
+              boxShadow="lg"
+            >
+              <AlertIcon />
+              {alertMessage}
+            </Alert>
+          </SlideFade>
+        </Box>
+      )}
     </Grid>
   );
 }
