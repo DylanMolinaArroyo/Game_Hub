@@ -1,4 +1,4 @@
-import { Text, SimpleGrid, Button, Icon } from "@chakra-ui/react";
+import { Text, SimpleGrid } from "@chakra-ui/react";
 import useGames from "../hooks/useGames";
 import GameCard from "./GameCard";
 import GameCardSkeleton from "./GameCardSkeleton";
@@ -10,16 +10,17 @@ import {
   getFavorites,
   removeFromFavorites,
 } from "../firestore";
-import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { Game } from "../hooks/useGames";
 
 interface Props {
   gameQuery: GameQuery;
+  onFavoriteChange: () => void;
 }
 
-const GameGrid = ({ gameQuery }: Props) => {
+const GameGrid = ({ gameQuery, onFavoriteChange }: Props) => {
   const { data, error, isLoading } = useGames(gameQuery);
   const skeletonCount = isLoading ? Array(20).fill(null) : [];
-  const [favoriteGames, setFavoriteGames] = useState<string[]>([]);
+  const [favoriteGames, setFavoriteGames] = useState<Game[]>([]);
 
   useEffect(() => {
     const fetchFavorites = async () => {
@@ -28,16 +29,19 @@ const GameGrid = ({ gameQuery }: Props) => {
     };
 
     fetchFavorites();
-  }, []);
+  }, [onFavoriteChange]);
 
-  const toggleFavorite = async (gameId: string) => {
-    if (favoriteGames.includes(gameId)) {
-      await removeFromFavorites(gameId);
-      setFavoriteGames(favoriteGames.filter((id) => id !== gameId));
+  const toggleFavorite = async (game: Game) => {
+    if (favoriteGames.some((favGame) => favGame.id === game.id)) {
+      await removeFromFavorites(game);
+      setFavoriteGames(
+        favoriteGames.filter((favGame) => favGame.id !== game.id)
+      );
     } else {
-      await addToFavorites(gameId);
-      setFavoriteGames([...favoriteGames, gameId]);
+      await addToFavorites(game);
+      setFavoriteGames([...favoriteGames, game]);
     }
+    onFavoriteChange();
   };
 
   if (error) return <Text>{error}</Text>;
@@ -55,24 +59,12 @@ const GameGrid = ({ gameQuery }: Props) => {
           </GameCardContainer>
         ))}
       {data.map((game) => (
-        <GameCardContainer key={game.id}>
+        <GameCardContainer
+          key={game.id}
+          onFavoriteClick={() => toggleFavorite(game)}
+          isFavorite={favoriteGames.some((favGame) => favGame.id === game.id)}
+        >
           <GameCard game={game} />
-          <Button
-            position="absolute"
-            top={2}
-            right={2}
-            onClick={() => toggleFavorite(game.id.toString())}
-          >
-            <Icon
-              as={
-                favoriteGames.includes(game.id.toString())
-                  ? FaHeart
-                  : FaRegHeart
-              }
-              color="red.400"
-              boxSize={7}
-            />
-          </Button>
         </GameCardContainer>
       ))}
     </SimpleGrid>

@@ -3,6 +3,7 @@ import {
   Flex,
   Grid,
   GridItem,
+  Heading,
   Icon,
   Show,
   Tab,
@@ -30,11 +31,12 @@ export interface GameQuery {
   genre: Genre | null;
   platform: Platform | null;
   sortOrder: string;
-  searchText: String;
+  searchText: string;
 }
 
 function App() {
   const [gameQuery, setGameQuery] = useState<GameQuery>({} as GameQuery);
+  const [, setUpdateKey] = useState(0);
 
   const handleClearFilters = () => {
     setGameQuery({
@@ -43,6 +45,10 @@ function App() {
       sortOrder: "",
       searchText: "",
     });
+  };
+
+  const handleFavoriteChange = () => {
+    setUpdateKey((prevKey) => prevKey + 1);
   };
 
   const isFilterApplied =
@@ -112,12 +118,17 @@ function App() {
                     )}
                   </Flex>
                 </Box>
-                <GameGrid gameQuery={gameQuery} />
+                <GameGrid
+                  gameQuery={gameQuery}
+                  onFavoriteChange={handleFavoriteChange}
+                />
               </GridItem>
             </TabPanel>
             <TabPanel>
-              <FavoritesGrid gameQuery={gameQuery} />
-              Hola
+              <Heading as="h1" marginY={5} fontSize="5xl" paddingLeft={2}>
+                Favorite games
+              </Heading>
+              <FavoritesGrid updateFavorites={handleFavoriteChange} />
             </TabPanel>
           </TabPanels>
         </Tabs>

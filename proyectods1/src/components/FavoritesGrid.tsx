@@ -1,58 +1,82 @@
+import { SimpleGrid, Heading, Icon, Flex } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { Button, Icon, SimpleGrid, Text } from "@chakra-ui/react";
-import { FaHeart, FaRegHeart } from "react-icons/fa";
 import {
   addToFavorites,
   getFavorites,
   removeFromFavorites,
 } from "../firestore";
-import useGamesList from "../hooks/useGamesList";
 import GameCard from "./GameCard";
-import GameCardSkeleton from "./GameCardSkeleton";
 import GameCardContainer from "./GameCardContainer";
-import { GameQuery } from "../App";
-import {
-  collection,
-  deleteDoc,
-  doc,
-  onSnapshot,
-  updateDoc,
-} from "firebase/firestore";
-import { db } from "../services/firebaseConfig";
+import { Game } from "../hooks/useGames";
+import GameCardSkeleton from "./GameCardSkeleton";
+import { IoMdHeartDislike } from "react-icons/io";
 
 interface Props {
-  gameQuery: GameQuery;
+  updateFavorites: () => void;
 }
 
-const FavoritesGrid = ({ gameQuery }: Props) => {
-  const [favoriteGames, setFavoriteGames] = useState<string[]>([]);
-  console.log("Favorite Games IDs:", favoriteGames);
-  const { data, error, isLoading } = useGamesList({ ids: favoriteGames });
-  const skeletonCount = isLoading ? Array(20).fill(null) : [];
+const FavoritesGrid = ({ updateFavorites }: Props) => {
+  const [favoriteGames, setFavoriteGames] = useState<Game[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, "favorites"), (snapshot) => {
-      const favoritesIds = snapshot.docs.map((doc) => doc.id);
-      setFavoriteGames(favoritesIds);
-    });
+    const fetchFavorites = async () => {
+      setIsLoading(true);
+      const favorites = await getFavorites();
+      setFavoriteGames(favorites);
+      setIsLoading(false);
+    };
 
-    return () => unsubscribe(); // Unsubscribe when the component unmounts
-  }, []);
+    fetchFavorites();
+  }, [updateFavorites]);
 
-  const toggleFavorite = async (gameId: string) => {
-    try {
-      const favoritesRef = doc(db, "Favorites", gameId);
-      if (favoriteGames.includes(gameId)) {
-        await deleteDoc(favoritesRef);
-      } else {
-        await updateDoc(favoritesRef, { gameId });
-      }
-    } catch (error) {
-      console.error("Error toggling favorite:", error);
+  const toggleFavorite = async (game: Game) => {
+    if (favoriteGames.some((favGame) => favGame.id === game.id)) {
+      await removeFromFavorites(game);
+      setFavoriteGames(
+        favoriteGames.filter((favGame) => favGame.id !== game.id)
+      );
+      updateFavorites();
+    } else {
+      await addToFavorites(game);
+      setFavoriteGames([...favoriteGames, game]);
     }
   };
-  console.log("isLoading:", isLoading);
-  console.log("data:", data);
+
+  if (isLoading) {
+    return (
+      <SimpleGrid
+        columns={{ sm: 1, md: 2, lg: 3, xl: 4 }}
+        padding="10px"
+        spacing={6}
+      >
+        {Array(20)
+          .fill(null)
+          .map((_, index) => (
+            <GameCardContainer key={index}>
+              <GameCardSkeleton />
+            </GameCardContainer>
+          ))}
+      </SimpleGrid>
+    );
+  }
+
+  if (favoriteGames.length === 0) {
+    return (
+      <Flex
+        direction="column"
+        align="center"
+        justify="center"
+        height="100vh"
+        textAlign="center"
+      >
+        <Heading as="h1" size="lg">
+          No favorites yet!
+        </Heading>
+        <Icon as={IoMdHeartDislike} boxSize={20} />
+      </Flex>
+    );
+  }
 
   return (
     <SimpleGrid
@@ -60,35 +84,15 @@ const FavoritesGrid = ({ gameQuery }: Props) => {
       padding="10px"
       spacing={6}
     >
-      {isLoading &&
-        skeletonCount.map((_, index) => (
-          <GameCardContainer key={index}>
-            <GameCardSkeleton />
-          </GameCardContainer>
-        ))}
-      {data.map((game) => {
-        console.log("Game Data:", game); // Imprime los datos del juego en la consola
-        return (
-          <GameCardContainer key={game.id}>
-            <GameCard game={game} />
-            <Button
-              position="absolute"
-              top={2}
-              right={2}
-              onClick={() => toggleFavorite(game.id.toString())}
-            >
-              <Icon
-                as={
-                  favoriteGames.includes(game.id.toString())
-                    ? FaHeart
-                    : FaRegHeart
-                }
-                color="red.400"
-              />
-            </Button>
-          </GameCardContainer>
-        );
-      })}
+      {favoriteGames.map((game) => (
+        <GameCardContainer
+          key={game.id}
+          onFavoriteClick={() => toggleFavorite(game)}
+          isFavorite={true}
+        >
+          <GameCard game={game} />
+        </GameCardContainer>
+      ))}
     </SimpleGrid>
   );
 };
