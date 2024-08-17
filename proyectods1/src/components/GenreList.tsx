@@ -57,3 +57,5 @@ const GenreList = ({ selectedGenre, onSelectGenre }: Props) => {
 };
 
 export default GenreList;
+
+
