@@ -9,7 +9,7 @@ import GameCard from "./GameCard";
 import GameCardContainer from "./GameCardContainer";
 import { Game } from "../hooks/useGames";
 import GameCardSkeleton from "./GameCardSkeleton";
-import { IoMdHeartDislike } from "react-icons/io";
+import { TbMoodCry } from "react-icons/tb";
 
 interface Props {
   updateFavorites: (message: string, status: "success" | "error") => void;
@@ -71,10 +71,10 @@ const FavoritesGrid = ({ updateFavorites }: Props) => {
         height="100vh"
         textAlign="center"
       >
-        <Heading as="h1" size="lg">
+        <Heading as="h1" size="lg" paddingY={5}>
           No favorites yet!
         </Heading>
-        <Icon as={IoMdHeartDislike} boxSize={20} />
+        <Icon as={TbMoodCry} boxSize={20} />
       </Flex>
     );
   }

@@ -6,6 +6,8 @@ import {
   Button,
   Image,
   Heading,
+  Card,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import useGenres from "../hooks/useGenres";
 import getCroppedImageUrl from "../services/image-url";
@@ -18,19 +20,21 @@ interface Props {
 
 const GenreList = ({ selectedGenre, onSelectGenre }: Props) => {
   const { data, isLoading, error } = useGenres();
+  const headingColor = useColorModeValue("gray.700", "whiteAlpha.900");
+  const headingColor2 = useColorModeValue("#ededed", "#202020");
 
   if (error) return null;
 
   if (isLoading) return <Spinner />;
 
   return (
-    <>
-      <Heading fontSize="2xl" marginTop={9} marginBottom={3}>
+    <Card padding={4} backgroundColor={headingColor2}>
+      <Heading fontSize="2xl" marginTop={1} marginBottom={6}>
         Genres
       </Heading>
       <List>
         {data.map((genre) => (
-          <ListItem key={genre.id} paddingY="5px">
+          <ListItem key={genre.id} paddingY="7px">
             <HStack>
               <Image
                 boxSize="32px"
@@ -42,6 +46,7 @@ const GenreList = ({ selectedGenre, onSelectGenre }: Props) => {
                 whiteSpace="normal"
                 textAlign="left"
                 fontWeight={genre.id === selectedGenre?.id ? "bold" : "normal"}
+                color={headingColor}
                 onClick={() => onSelectGenre(genre)}
                 fontSize="md"
                 variant="link"
@@ -52,10 +57,8 @@ const GenreList = ({ selectedGenre, onSelectGenre }: Props) => {
           </ListItem>
         ))}
       </List>
-    </>
+    </Card>
   );
 };
 
 export default GenreList;
-
-

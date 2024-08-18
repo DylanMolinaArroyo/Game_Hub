@@ -43,20 +43,18 @@ const useGamesList = (params: FetchGamesParams, requestConfig?: AxiosRequestConf
     setLoading(true);
     const { ids } = params;
 
-    // Crear una promesa para obtener todos los juegos por ID
     const requests = ids.map(id =>
       apiClient.get<GameProfile>(`/games/${id}`, { ...requestConfig })
     );
 
     return Promise.all(requests)
       .then(responses => {
-        console.log("API responses:", responses); // Verifica la estructura de la respuesta
         setData(responses.map(response => response.data));
         setLoading(false);
       })
       .catch(err => {
         if (err instanceof CanceledError) return;
-        console.error("Error fetching data:", err); // Mensaje de error detallado
+        console.error("Error fetching data:", err); 
         setError(err.message);
         setLoading(false);
       });

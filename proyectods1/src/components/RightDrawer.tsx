@@ -37,14 +37,21 @@ const RightDrawer = () => {
 
   return (
     <>
-      <Button onClick={onOpen}>
-        <Icon as={FaBars} size="20px" />
+      <Button onClick={onOpen} variant="unstyled" top="4px">
+        <Icon as={FaBars} boxSize="20px" />
       </Button>
       <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
         <DrawerOverlay />
         <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>User Information</DrawerHeader>
+          <DrawerCloseButton
+            position="absolute"
+            top="16px"
+            right="16px"
+            _hover={{ color: "red.500" }}
+          />
+          <DrawerHeader paddingLeft="16px" paddingRight="48px" top="16px">
+            User Information
+          </DrawerHeader>
 
           <DrawerBody>
             <Card
