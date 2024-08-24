@@ -117,16 +117,18 @@ function App() {
                     <Box marginRight={5}>
                       <PlatformSelector
                         selectedPlatform={gameQuery.platform}
-                        onSelectPlatform={(platform) =>
-                          setGameQuery({ ...gameQuery, platform })
-                        }
+                        onSelectPlatform={(platform) => {
+                          setGameQuery({ ...gameQuery, platform });
+                          setPage(1);
+                        }}
                       />
                     </Box>
                     <SortSelector
                       sortOrder={gameQuery.sortOrder}
-                      onSelectSortOrder={(sortOrder) =>
-                        setGameQuery({ ...gameQuery, sortOrder })
-                      }
+                      onSelectSortOrder={(sortOrder) => {
+                        setGameQuery({ ...gameQuery, sortOrder });
+                        setPage(1);
+                      }}
                     />
                     {isFilterApplied && (
                       <Box marginLeft="auto">
