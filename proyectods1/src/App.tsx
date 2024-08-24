@@ -55,6 +55,7 @@ function App() {
       sortOrder: "",
       searchText: "",
     });
+    setPage(1);
   };
 
   const handleFavoriteChange = (

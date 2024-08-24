@@ -268,6 +268,7 @@ const GameModal = ({ isOpen, onClose, gameId }: Props) => {
                       Description
                     </Heading>
                     <Text textAlign="justify">
+                      {gameProfile.description}
                       <CleanDescription
                         description={
                           isDescriptionExpanded
