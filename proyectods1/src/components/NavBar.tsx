@@ -27,7 +27,6 @@ const NavBar = ({ onSearch }: Props) => {
       <SearchInput onSearch={onSearch} />
       <ColorModeSwitch />
       {userPhoto && <Avatar src={userPhoto} size="sm" />}
-
       <RightDrawer />
     </HStack>
   );

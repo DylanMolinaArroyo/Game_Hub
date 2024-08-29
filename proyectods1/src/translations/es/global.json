@@ -1,0 +1,200 @@
+{
+    "search_input": {
+        "message": "Buscar juegos.."
+    },"languages": {
+      "message": "Idiomas"
+    },"dark_mode": {
+        "message": "Modo oscuro"
+    },"platforms": {
+        "message": "Plataformas"
+    },
+    
+    "genres": {
+      "message": "Géneros"
+    },
+    "games": {
+      "message": "Juegos"
+    },
+    "order_by": {
+      "message": "Ordenar por:"
+    },
+    "action": {
+      "message": "Acción"
+    },
+    
+    "indie": {
+      "message": "Indie"
+    },
+    "adventure": {
+      "message": "Aventura"
+    },
+    "rpg": {
+      "message": "RPG"
+    },
+    "strategy": {
+      "message": "Estrategia"
+    },
+    "shooter": {
+      "message": "Disparos"
+    },
+    "casual": {
+      "message": "Casual"
+    },
+    "simulation": {
+      "message": "Simulación"
+    },
+    "puzzle": {
+      "message": "Rompecabezas"
+    },
+    "arcade": {
+      "message": "Arcade"
+    },
+    "platformer": {
+      "message": "Plataformas"
+    },
+    "racing": {
+      "message": "Carreras"
+    },
+    "massively multiplayer": {
+      "message": "Multijugador Masivo"
+    },
+    "sports": {
+      "message": "Deportes"
+    },
+    "fighting": {
+      "message": "Peleas"
+    },
+    "board games": {
+      "message": "Juegos de Mesa"
+    },
+    "educational": {
+      "message": "Educativo"
+    },
+    "card": {
+      "message": "Cartas"
+    },
+    "family": {
+      "message": "Familiar"
+    },
+      "relevance": {
+        "message": "Relevancia"
+      },
+      "date_added": {
+        "message": "Fecha añadida"
+      },
+      "name": {
+        "message": "Nombre"
+      },
+      "release_date": {
+        "message": "Fecha de lanzamiento"
+      },
+      "popularity": {
+        "message": "Popularidad"
+      },
+      "average_rating": {
+        "message": "Calificación promedio"
+      },
+      "language_spanish": {
+        "message": "Español"
+      },
+      "language_english": {
+        "message": "Inglés"
+      },
+    "clear_filter": {
+        "message": "Eliminar filtros"
+    },
+    "removed_from_favorites": {
+
+     "message": "¡Eliminado de favoritos!"},
+     "added_to_favorites": {
+
+      "message": " añadido a favoritos!"},
+        
+      "no_favorites_yet": {
+        "message": "Aún no hay favoritos"
+      },
+      "error_fetching_data": {
+        "message": "Error al obtener los datos"
+      },
+        "dont_have_account": {
+          "message": "¿No tienes una cuenta?"       
+        },
+  "login_title": {
+    "message": "Iniciar sesión"
+  },
+  "welcome_back": {
+    "message": "¡Bienvenido de nuevo! Por favor, ingresa tus datos."
+  },
+  "login_with_email_and_password": {
+    "message": "Iniciar sesión"
+  },
+  "login_with_google": {
+    "message": "Iniciar sesión con Google"
+  },
+  "sign_up": {
+    "message": "Regístrate"
+  }, 
+  "or": {
+    "message": "O"
+  },
+  "already_have_account": {
+    "message": "¿Ya tienes una cuenta?"
+  },
+  "welcome_message": {
+    "message": "¡Bienvenido! Por favor, ingresa tu información a continuación para comenzar."
+  }, "password_mismatch": {
+    "message": "Las contraseñas no coinciden"
+  },
+  "sign_up_with_email":{
+    "message": "Registrarse"
+  },
+    "sign_up_with_google":{"message": "Regístrate con Google"},
+    "favorites": {
+    "message": "Favoritos"
+  }, "email": {
+    "message": "Correo"
+  }, "password": {
+    "message": "Contraseña"
+  },
+  "re_enter_password": {
+    "message": "Volver a ingresar la contraseña"
+  }, "logout": {
+    "message": "Cerrar sesión"
+  }, "user_information": {
+    "message": "Información del usuario"
+  },
+    "games_heading": {
+      "message": "Juegos de {{platform}} {{genre}}"
+    
+    }, "loading_error": {
+      "message": "Error al cargar los datos del juego."
+    },
+    "play_time": {
+      "message": "Tiempo de juego"
+    },
+    "hours": {
+      "message": "Horas"
+    },
+    "developers": {
+      "message": "Desarrolladores"
+    },
+    "developer_site": {
+      "message": "Sitio del desarrollador"
+    },
+    "description": {
+      "message": "Descripción"
+    },
+    "read_more": {
+      "message": "Leer más"
+    },
+    "read_less": {
+      "message": "Leer menos"
+    }, "metacritic": {
+      "message": "Puntuación Metacritic"
+    },"favorite_games": {
+    "message": "Juegos Favoritos"
+  }
+  
+    }
+    
+  

@@ -1,5 +1,6 @@
 import { SimpleGrid, Heading, Icon, Flex } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   addToFavorites,
   getFavorites,
@@ -29,6 +30,7 @@ const FavoritesGrid = ({ updateFavorites }: Props) => {
 
     fetchFavorites();
   }, [updateFavorites]);
+  const { t } = useTranslation();
 
   const toggleFavorite = async (game: Game) => {
     if (favoriteGames.some((favGame) => favGame.id === game.id)) {
@@ -36,11 +38,17 @@ const FavoritesGrid = ({ updateFavorites }: Props) => {
       setFavoriteGames(
         favoriteGames.filter((favGame) => favGame.id !== game.id)
       );
-      updateFavorites(`${game.name} removed from favorites!`, "error");
+      updateFavorites(
+        `${game.name} ${t("removed_from_favorites.message")}`,
+        "error"
+      );
     } else {
       await addToFavorites(game);
       setFavoriteGames([...favoriteGames, game]);
-      updateFavorites(`${game.name} added to favorites!`, "success");
+      updateFavorites(
+        `${game.name} ${t("added_to_favorites.message")}`,
+        "success"
+      );
     }
   };
 
@@ -72,7 +80,7 @@ const FavoritesGrid = ({ updateFavorites }: Props) => {
         textAlign="center"
       >
         <Heading as="h1" size="lg" paddingY={5}>
-          No favorites yet!
+          {t("no_favorites_yet.message")}
         </Heading>
         <Icon as={TbMoodCry} boxSize={20} />
       </Flex>

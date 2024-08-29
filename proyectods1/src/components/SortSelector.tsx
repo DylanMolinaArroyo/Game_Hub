@@ -1,5 +1,7 @@
 import { Button, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 import { BsChevronDown } from "react-icons/bs";
+import { useTranslation } from "react-i18next";
+import { useMemo } from "react";
 
 interface Props {
   onSelectSortOrder: (sortOrder: string) => void;
@@ -7,22 +9,26 @@ interface Props {
 }
 
 const SortSelector = ({ onSelectSortOrder, sortOrder }: Props) => {
+  const { t } = useTranslation();
   const sortOrders = [
-    { value: "", label: "Relevance" },
-    { value: "-added", label: "Date added" },
-    { value: "name", label: "Name" },
-    { value: "-release", label: "Release date" },
-    { value: "-metacritic", label: "Popularity" },
-    { value: "-rating", label: "Average rating" },
+    { value: "", label: t("relevance.message") },
+    { value: "-added", label: t("date_added.message") },
+    { value: "name", label: t("name.message") },
+    { value: "-release", label: t("release_date.message") },
+    { value: "-metacritic", label: t("popularity.message") },
+    { value: "-rating", label: t("average_rating.message") },
   ];
   const currentSortOrder = sortOrders.find(
     (order) => order.value === sortOrder
   );
+  const text = useMemo(() => {
+    return `${t("order_by.message")}`;
+  }, [t]);
 
   return (
     <Menu>
       <MenuButton as={Button} rightIcon={<BsChevronDown />}>
-        Order by: {currentSortOrder?.label || "Relevance"}
+        {text} {currentSortOrder?.label || t("relevance.message")}
       </MenuButton>
       <MenuList>
         {sortOrders.map((order) => (

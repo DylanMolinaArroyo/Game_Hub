@@ -8,6 +8,7 @@ import {
   Button,
   useColorModeValue,
   Fade,
+  Tooltip,
 } from "@chakra-ui/react";
 import PlatformIconList from "./PlatformIconList";
 import CriticScore from "./CriticScore";
@@ -28,11 +29,14 @@ const GameCard = ({ game }: Props) => {
 
   return (
     <>
-      <Card>
+      <Card borderRadius="md" boxShadow="md" overflow="hidden">
         <Fade in={isImageLoaded}>
           <Image
             src={getCroppedImageUrl(game.background_image)}
             onLoad={() => setIsImageLoaded(true)}
+            objectFit="cover"
+            width="100%"
+            height="200px"
           />
         </Fade>
 
@@ -44,17 +48,27 @@ const GameCard = ({ game }: Props) => {
             />
             <CriticScore score={game.metacritic} />
           </HStack>
-          <Button
-            whiteSpace="normal"
-            textAlign="left"
-            onClick={handleOpen}
-            fontSize="2xl"
-            fontWeight="bold"
-            variant="link"
-            color={headingColor}
+          <Tooltip
+            label={game.name}
+            aria-label={game.name}
+            placement="bottom-end"
           >
-            {game.name}
-          </Button>
+            <Button
+              whiteSpace="nowrap"
+              textOverflow="ellipsis"
+              overflow="hidden"
+              onClick={handleOpen}
+              fontSize="2xl"
+              fontWeight="bold"
+              variant="link"
+              color={headingColor}
+              maxWidth="250px"
+              textAlign="left"
+              display="block"
+            >
+              {game.name}
+            </Button>
+          </Tooltip>
         </CardBody>
       </Card>
 

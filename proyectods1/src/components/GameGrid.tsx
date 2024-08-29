@@ -1,4 +1,12 @@
-import { Box, SimpleGrid, Text } from "@chakra-ui/react";
+import {
+  Box,
+  SimpleGrid,
+  Text,
+  Flex,
+  Heading,
+  Icon,
+  useColorModeValue,
+} from "@chakra-ui/react";
 import useGames from "../hooks/useGames";
 import GameCard from "./GameCard";
 import GameCardSkeleton from "./GameCardSkeleton";
@@ -11,6 +19,8 @@ import {
   removeFromFavorites,
 } from "../firestore";
 import { Game } from "../hooks/useGames";
+import { TbMoodCry } from "react-icons/tb";
+import { t } from "i18next";
 
 interface Props {
   gameQuery: GameQuery;
@@ -29,6 +39,8 @@ const GameGrid = ({
   const { data, error, isLoading, totalPages } = useGames(gameQuery, page);
   const skeletonCount = isLoading ? Array(8).fill(null) : [];
   const [favoriteGames, setFavoriteGames] = useState<Game[]>([]);
+  const errorBgColor = useColorModeValue("red.50", "red.900");
+  const errorTextColor = useColorModeValue("red.800", "red.300");
 
   useEffect(() => {
     const fetchFavorites = async () => {
@@ -49,15 +61,43 @@ const GameGrid = ({
       setFavoriteGames(
         favoriteGames.filter((favGame) => favGame.id !== game.id)
       );
-      onFavoriteChange(`${game.name} removed from favorites!`, "error");
+      onFavoriteChange(
+        `${game.name} ${t("removed_from_favorites.message")}`,
+        "error"
+      );
     } else {
       await addToFavorites(game);
       setFavoriteGames([...favoriteGames, game]);
-      onFavoriteChange(`${game.name} added to favorites!`, "success");
+      onFavoriteChange(
+        `${game.name} ${t("added_to_favorites.message")}`,
+        "success"
+      );
     }
   };
 
-  if (error) return <Text>{error}</Text>;
+  if (error) {
+    return (
+      <Flex
+        direction="column"
+        align="center"
+        justify="center"
+        height="100vh"
+        textAlign="center"
+        backgroundColor={errorBgColor}
+        padding={4}
+        borderRadius="md"
+        boxShadow="md"
+      >
+        <Heading as="h1" size="lg" paddingY={5} color={errorTextColor}>
+          Something went wrong
+        </Heading>
+        <Icon as={TbMoodCry} boxSize={20} color="red.500" />
+        <Text color={errorTextColor} mt={4}>
+          {error}
+        </Text>
+      </Flex>
+    );
+  }
 
   return (
     <Box>

@@ -36,6 +36,8 @@ import useGameImages from "../hooks/useGamesImages";
 import { MdAccessTime } from "react-icons/md";
 import GameModalSkeleton from "./GameModalSkeleton";
 import { FaExternalLinkAlt } from "react-icons/fa";
+import i18n from "../config/i18n";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   isOpen: boolean;
@@ -55,6 +57,7 @@ const GameModal = ({ isOpen, onClose, gameId }: Props) => {
   } = useGameProfile(gameId);
   const { data: gameVideos, refetch: refetchVideos } = useGameVideos(gameId);
   const { data: gameImages, refetch: refretchImages } = useGameImages(gameId);
+  const { t } = useTranslation();
 
   const modalBg = useColorModeValue("gray.50", "gray.800");
   const headingColor = useColorModeValue("gray.700", "whiteAlpha.900");
@@ -62,6 +65,10 @@ const GameModal = ({ isOpen, onClose, gameId }: Props) => {
     "blackAlpha.700",
     "whiteAlpha.900"
   );
+
+  const linkColor = useColorModeValue("blue.500", "blue.300");
+  const linkHoverColor = useColorModeValue("blue.600", "blue.400");
+  const linkFocusColor = useColorModeValue("blue.700", "blue.500");
 
   useEffect(() => {
     if (isOpen && !isDataLoaded) {
@@ -102,7 +109,7 @@ const GameModal = ({ isOpen, onClose, gameId }: Props) => {
             {isLoading ? (
               <GameModalSkeleton isOpen={true} onClose={() => {}} />
             ) : error || !gameProfile ? (
-              <Text color="red.500">Error loading game data.</Text>
+              <Text color="red.500">{t("loading_error.message")}</Text>
             ) : (
               <>
                 <HStack
@@ -147,21 +154,23 @@ const GameModal = ({ isOpen, onClose, gameId }: Props) => {
                         </GridItem>
                         <GridItem>
                           <Stat>
-                            <StatLabel fontSize={20}>Play Time</StatLabel>
+                            <StatLabel fontSize={20}>
+                              {t("play_time.message")}
+                            </StatLabel>
                             <StatNumber>
                               <Icon
                                 as={MdAccessTime}
                                 size={"30px"}
                                 color={"#553C9A"}
                               />{" "}
-                              {gameProfile.playtime} Hours
+                              {gameProfile.playtime} {t("hours.message")}
                             </StatNumber>
                           </Stat>
                         </GridItem>
                       </Grid>
                       <HStack marginBottom={2} marginTop={2}>
                         <Heading size="md" color={headingColor}>
-                          Release Date:
+                          {t("release_date.message")}
                         </Heading>
                         <Text fontSize="18px" color={headingColor}>
                           {gameProfile.released}
@@ -173,7 +182,7 @@ const GameModal = ({ isOpen, onClose, gameId }: Props) => {
                         marginBottom={2}
                         marginTop={2}
                       >
-                        Developers
+                        {t("developers.message")}
                       </Heading>
                       <DeveloperList
                         developers={gameProfile.developers}
@@ -181,17 +190,25 @@ const GameModal = ({ isOpen, onClose, gameId }: Props) => {
                       <Link
                         href={gameProfile.website}
                         isExternal
-                        fontSize={15}
-                        color="#4299e1"
+                        fontSize="15px"
+                        color={linkColor}
+                        _hover={{
+                          color: linkHoverColor,
+                          textDecoration: "underline",
+                        }}
+                        _focus={{ color: linkFocusColor, boxShadow: "outline" }}
+                        display="inline-flex"
+                        alignItems="center"
                       >
-                        Developer site <FaExternalLinkAlt />
+                        {t("developer_site.message")}
+                        <Icon as={FaExternalLinkAlt} ml={2} />
                       </Link>
                     </GridItem>
                   </Grid>
                 </Card>
 
                 <Heading size="md" color={headingColor} marginBottom={2}>
-                  Platforms
+                  {t("platforms.message")}
                 </Heading>
                 <PlatformIconList
                   platforms={gameProfile.parent_platforms?.map(
@@ -265,16 +282,16 @@ const GameModal = ({ isOpen, onClose, gameId }: Props) => {
                   </Center>
                   <Box>
                     <Heading size="md" color={headingColor} marginBottom={2}>
-                      Description
+                      {t("description.message")}
                     </Heading>
                     <Text textAlign="justify">
-                      {gameProfile.description}
                       <CleanDescription
                         description={
                           isDescriptionExpanded
                             ? gameProfile.description
                             : truncatedDescription
                         }
+                        targetLanguage={i18n.language}
                       />
                     </Text>
                     <Button
@@ -283,7 +300,9 @@ const GameModal = ({ isOpen, onClose, gameId }: Props) => {
                       variant="link"
                       colorScheme="blue"
                     >
-                      {isDescriptionExpanded ? "Leer menos" : "Leer más"}
+                      {isDescriptionExpanded
+                        ? t("read_less.message")
+                        : t("read_more.message")}
                     </Button>
                   </Box>
                   <Divider

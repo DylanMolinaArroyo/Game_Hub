@@ -19,6 +19,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { FcGoogle } from "react-icons/fc";
+import { useTranslation } from "react-i18next";
 
 function Signup() {
   const headingColor = useColorModeValue("gray.700", "whiteAlpha.900");
@@ -31,6 +32,7 @@ function Signup() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const { t } = useTranslation();
 
   const signUpWithGoogle = async () => {
     setAuthing(true);
@@ -92,16 +94,16 @@ function Signup() {
               color={headingColor}
               textAlign="center"
             >
-              Sign Up
+              {t("sign_up.message")}
             </Heading>
             <Text fontSize="md" mb={4} textAlign="center">
-              Welcome! Please enter your information below to begin.
+              {t("welcome_message.message")}
             </Text>
 
             <Stack spacing={2} mb={4}>
               <Input
                 type="email"
-                placeholder="Email"
+                placeholder={t("email.message")}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 variant="flushed"
@@ -109,7 +111,7 @@ function Signup() {
               />
               <Input
                 type="password"
-                placeholder="Password"
+                placeholder={t("password.message")}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 variant="flushed"
@@ -117,7 +119,7 @@ function Signup() {
               />
               <Input
                 type="password"
-                placeholder="Re-Enter Password"
+                placeholder={t("re_enter_password.message")}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 variant="flushed"
@@ -138,7 +140,7 @@ function Signup() {
               w="100%"
               mb={1}
             >
-              Sign Up With Email and Password
+              {t("sign_up_with_email.message")}
             </Button>
 
             <Center my={4}>
@@ -158,12 +160,12 @@ function Signup() {
               w="100%"
             >
               <Icon as={FcGoogle} boxSize={25} />
-              Sign Up With Google
+              {t("sign_up_with_google.message")}
             </Button>
 
             <Center mt={10}>
               <Text fontSize="sm" color="gray.400">
-                Already have an account?{" "}
+                {t("already_have_account.message")}{" "}
                 <Text
                   as="span"
                   fontWeight="semibold"
@@ -171,7 +173,7 @@ function Signup() {
                   cursor="pointer"
                   textDecoration="underline"
                 >
-                  <a href="/login">Log In</a>
+                  <a href="/login">{t("login_title.message")}</a>
                 </Text>
               </Text>
             </Center>

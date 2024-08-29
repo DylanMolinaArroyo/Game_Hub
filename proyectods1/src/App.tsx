@@ -30,6 +30,8 @@ import { FaHome } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa6";
 import FavoritesGrid from "./components/FavoritesGrid";
 import PageTurner from "./components/PageTurner";
+import { useTranslation } from "react-i18next";
+import i18n from "./config/i18n";
 
 export interface GameQuery {
   genre: Genre | null;
@@ -73,7 +75,7 @@ function App() {
     gameQuery.platform ||
     gameQuery.sortOrder ||
     gameQuery.searchText;
-
+  const { t } = useTranslation();
   return (
     <Grid
       templateAreas={{
@@ -105,15 +107,18 @@ function App() {
             </Tab>
             <Tab>
               <Icon as={FaHeart} boxSize={5} />
-              <Text paddingX={2}>Favorites</Text>
+              <Text paddingX={2}>{t("favorites.message")}</Text>
             </Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
               <GridItem area="main">
                 <Box paddingLeft={2}>
-                  <GameHeading gameQuery={gameQuery} />
-                  <Flex marginBottom={5} position="relative">
+                  <GameHeading
+                    gameQuery={gameQuery}
+                    targetLanguage={i18n.language}
+                  />
+                  <Flex marginBottom={8} position="relative">
                     <Box marginRight={5}>
                       <PlatformSelector
                         selectedPlatform={gameQuery.platform}
@@ -180,7 +185,7 @@ function App() {
             </TabPanel>
             <TabPanel>
               <Heading as="h1" marginY={5} fontSize="5xl" paddingLeft={2}>
-                Favorite games
+                {t("favorite_games.message")}
               </Heading>
               <FavoritesGrid updateFavorites={handleFavoriteChange} />
             </TabPanel>

@@ -21,7 +21,7 @@ initializeApp(firebaseConfig);
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ChakraProvider theme={theme}>
-      <ColorModeScript initialColorMode={theme.config.InitialColorMode} />
+      <ColorModeScript initialColorMode={theme.config.initialColorMode} />
       <Router>
         <Routes>
           <Route
