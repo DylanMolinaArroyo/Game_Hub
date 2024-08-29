@@ -109,7 +109,7 @@ const GameModal = ({ isOpen, onClose, gameId }: Props) => {
             {isLoading ? (
               <GameModalSkeleton isOpen={true} onClose={() => {}} />
             ) : error || !gameProfile ? (
-              <Text color="red.500">{t("loading_error.message")}</Text>
+              <Text>{t("loading_error.message")}</Text>
             ) : (
               <>
                 <HStack

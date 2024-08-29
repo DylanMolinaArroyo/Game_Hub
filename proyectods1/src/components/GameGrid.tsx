@@ -39,7 +39,6 @@ const GameGrid = ({
   const { data, error, isLoading, totalPages } = useGames(gameQuery, page);
   const skeletonCount = isLoading ? Array(8).fill(null) : [];
   const [favoriteGames, setFavoriteGames] = useState<Game[]>([]);
-  const errorBgColor = useColorModeValue("red.50", "red.900");
   const errorTextColor = useColorModeValue("red.800", "red.300");
 
   useEffect(() => {
@@ -83,15 +82,14 @@ const GameGrid = ({
         justify="center"
         height="100vh"
         textAlign="center"
-        backgroundColor={errorBgColor}
         padding={4}
         borderRadius="md"
         boxShadow="md"
       >
-        <Heading as="h1" size="lg" paddingY={5} color={errorTextColor}>
+        <Heading as="h1" size="lg" paddingY={5}>
           Something went wrong
         </Heading>
-        <Icon as={TbMoodCry} boxSize={20} color="red.500" />
+        <Icon as={TbMoodCry} boxSize={20} />
         <Text color={errorTextColor} mt={4}>
           {error}
         </Text>
