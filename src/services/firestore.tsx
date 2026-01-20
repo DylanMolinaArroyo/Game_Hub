@@ -7,8 +7,8 @@ import {
   arrayRemove,
 } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-import { db } from "./services/firebaseConfig";
-import { Game } from "./hooks/useGames";
+import { db } from "./firebaseConfig";
+import { Game } from "../hooks/useGames";
 
 const auth = getAuth();
 

@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
-import App from "./App.tsx";
-import Login from "./Login.tsx";
-import Signup from "./Signup.tsx";
+import App from "./app/App.tsx";
+import Login from "./auth/Login.tsx";
+import Signup from "./auth/Signup.tsx";
 import "./index.css";
 import theme from "./theme.ts";
 import {
@@ -13,7 +13,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import { initializeApp } from "firebase/app";
-import AuthRoute from "./AuthRoute.tsx";
+import AuthRoute from "./auth/AuthRoute.tsx";
 import { firebaseConfig } from "./services/firebaseConfig.ts";
 
 initializeApp(firebaseConfig);
@@ -38,5 +38,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         </Routes>
       </Router>
     </ChakraProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );

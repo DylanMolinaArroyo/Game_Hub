@@ -1,6 +1,6 @@
 import { Heading } from "@chakra-ui/react";
 import useTranslateText from "../hooks/useTranslation"; // Asegúrate de que la ruta sea correcta
-import { GameQuery } from "../App";
+import { GameQuery } from "../app/App";
 
 interface Props {
   gameQuery: GameQuery;

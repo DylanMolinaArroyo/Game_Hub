@@ -16,22 +16,22 @@ import {
   Tabs,
   Text,
 } from "@chakra-ui/react";
-import NavBar from "./components/NavBar";
-import GameGrid from "./components/GameGrid";
-import GenreList from "./components/GenreList";
+import NavBar from "../components/NavBar";
+import GameGrid from "../components/GameGrid";
+import GenreList from "../components/GenreList";
 import { useState } from "react";
-import { Genre } from "./hooks/useGenres";
-import PlatformSelector from "./components/PlatformSelector";
-import { Platform } from "./hooks/useGames";
-import SortSelector from "./components/SortSelector";
-import GameHeading from "./components/GameHeading";
-import ClearFiltersButton from "./components/ClearFiltersButton";
+import { Genre } from "../hooks/useGenres";
+import PlatformSelector from "../components/PlatformSelector";
+import { Platform } from "../hooks/useGames";
+import SortSelector from "../components/SortSelector";
+import GameHeading from "../components/GameHeading";
+import ClearFiltersButton from "../components/ClearFiltersButton";
 import { FaHome } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa6";
-import FavoritesGrid from "./components/FavoritesGrid";
-import PageTurner from "./components/PageTurner";
+import FavoritesGrid from "../components/FavoritesGrid";
+import PageTurner from "../components/PageTurner";
 import { useTranslation } from "react-i18next";
-import i18n from "./config/i18n";
+import i18n from "../config/i18n";
 
 export interface GameQuery {
   genre: Genre | null;
@@ -46,7 +46,7 @@ function App() {
   const [, setUpdateKey] = useState(0);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [alertStatus, setAlertStatus] = useState<"success" | "error">(
-    "success"
+    "success",
   );
   const [totalPages, setTotalPages] = useState(0);
 
@@ -62,7 +62,7 @@ function App() {
 
   const handleFavoriteChange = (
     message: string,
-    status: "success" | "error"
+    status: "success" | "error",
   ) => {
     setUpdateKey((prevKey) => prevKey + 1);
     setAlertMessage(message);

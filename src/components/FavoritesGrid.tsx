@@ -5,7 +5,7 @@ import {
   addToFavorites,
   getFavorites,
   removeFromFavorites,
-} from "../firestore";
+} from "../services/firestore";
 import GameCard from "./GameCard";
 import GameCardContainer from "./GameCardContainer";
 import { Game } from "../hooks/useGames";
@@ -36,18 +36,18 @@ const FavoritesGrid = ({ updateFavorites }: Props) => {
     if (favoriteGames.some((favGame) => favGame.id === game.id)) {
       await removeFromFavorites(game);
       setFavoriteGames(
-        favoriteGames.filter((favGame) => favGame.id !== game.id)
+        favoriteGames.filter((favGame) => favGame.id !== game.id),
       );
       updateFavorites(
         `${game.name} ${t("removed_from_favorites.message")}`,
-        "error"
+        "error",
       );
     } else {
       await addToFavorites(game);
       setFavoriteGames([...favoriteGames, game]);
       updateFavorites(
         `${game.name} ${t("added_to_favorites.message")}`,
-        "success"
+        "success",
       );
     }
   };

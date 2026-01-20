@@ -11,13 +11,13 @@ import useGames from "../hooks/useGames";
 import GameCard from "./GameCard";
 import GameCardSkeleton from "./GameCardSkeleton";
 import GameCardContainer from "./GameCardContainer";
-import { GameQuery } from "../App";
+import { GameQuery } from "../app/App";
 import { useEffect, useState } from "react";
 import {
   addToFavorites,
   getFavorites,
   removeFromFavorites,
-} from "../firestore";
+} from "../services/firestore";
 import { Game } from "../hooks/useGames";
 import { TbMoodCry } from "react-icons/tb";
 import { t } from "i18next";
@@ -58,18 +58,18 @@ const GameGrid = ({
     if (favoriteGames.some((favGame) => favGame.id === game.id)) {
       await removeFromFavorites(game);
       setFavoriteGames(
-        favoriteGames.filter((favGame) => favGame.id !== game.id)
+        favoriteGames.filter((favGame) => favGame.id !== game.id),
       );
       onFavoriteChange(
         `${game.name} ${t("removed_from_favorites.message")}`,
-        "error"
+        "error",
       );
     } else {
       await addToFavorites(game);
       setFavoriteGames([...favoriteGames, game]);
       onFavoriteChange(
         `${game.name} ${t("added_to_favorites.message")}`,
-        "success"
+        "success",
       );
     }
   };
