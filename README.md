@@ -91,6 +91,6 @@ VITE_RAWG_API_KEY=""
 ```
 ---
 
-**Autors:** Dylan Molina Arroyo, Fabricio Alfaro
+**Autors:** Dylan Molina Arroyo, Fabricio Alfaro, Sharonblanpi1234
 
 **License:** This project is for educational and development purposes.
