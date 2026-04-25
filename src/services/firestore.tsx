@@ -14,48 +14,22 @@ const auth = getAuth();
 
 export const addToFavorites = async (game: Game) => {
   const user = auth.currentUser;
-
-  if (!user) {
-    console.log("No user is signed in.");
-    return;
-  }
+  if (!user) return;
 
   const userFavoritesRef = doc(db, "Favorites", user.uid);
   await updateDoc(userFavoritesRef, {
     games: arrayUnion(game),
   });
-
-  const updatedFavorites = await getFavorites();
-  console.log("Updated favorites after adding:", updatedFavorites);
-
-  if (updatedFavorites.some((favGame: Game) => favGame.id === game.id)) {
-    console.log(`Game ${game.name} added to favorites successfully!`);
-  } else {
-    console.log(`Failed to add game ${game.name} to favorites.`);
-  }
 };
 
 export const removeFromFavorites = async (game: Game) => {
   const user = auth.currentUser;
-
-  if (!user) {
-    console.log("No user is signed in.");
-    return;
-  }
+  if (!user) return;
 
   const userFavoritesRef = doc(db, "Favorites", user.uid);
   await updateDoc(userFavoritesRef, {
     games: arrayRemove(game),
   });
-
-  const updatedFavorites = await getFavorites();
-  console.log("Updated favorites after removing:", updatedFavorites);
-
-  if (!updatedFavorites.some((favGame: Game) => favGame.id === game.id)) {
-    console.log(`Game ${game.name} removed from favorites successfully!`);
-  } else {
-    console.log(`Failed to remove game ${game.name} from favorites.`);
-  }
 };
 
 export const getFavorites = async (): Promise<Game[]> => {

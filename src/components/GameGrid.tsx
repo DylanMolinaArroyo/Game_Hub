@@ -26,7 +26,6 @@ interface Props {
   gameQuery: GameQuery;
   onFavoriteChange: (message: string, status: "success" | "error") => void;
   page: number;
-  setPage: React.Dispatch<React.SetStateAction<number>>;
   onTotalPagesChange: (totalPages: number) => void;
 }
 

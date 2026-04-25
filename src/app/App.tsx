@@ -19,7 +19,7 @@ import {
 import NavBar from "../components/NavBar";
 import GameGrid from "../components/GameGrid";
 import GenreList from "../components/GenreList";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Genre } from "../hooks/useGenres";
 import PlatformSelector from "../components/PlatformSelector";
 import { Platform } from "../hooks/useGames";
@@ -43,7 +43,6 @@ export interface GameQuery {
 function App() {
   const [gameQuery, setGameQuery] = useState<GameQuery>({} as GameQuery);
   const [page, setPage] = useState(1);
-  const [, setUpdateKey] = useState(0);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [alertStatus, setAlertStatus] = useState<"success" | "error">(
     "success",
@@ -60,15 +59,14 @@ function App() {
     setPage(1);
   };
 
-  const handleFavoriteChange = (
-    message: string,
-    status: "success" | "error",
-  ) => {
-    setUpdateKey((prevKey) => prevKey + 1);
-    setAlertMessage(message);
-    setAlertStatus(status);
-    setTimeout(() => setAlertMessage(null), 3000);
-  };
+  const handleFavoriteChange = useCallback(
+    (message: string, status: "success" | "error") => {
+      setAlertMessage(message);
+      setAlertStatus(status);
+      setTimeout(() => setAlertMessage(null), 3000);
+    },
+    [],
+  );
 
   const isFilterApplied =
     gameQuery.genre ||
@@ -163,7 +161,6 @@ function App() {
                 <GameGrid
                   gameQuery={gameQuery}
                   page={page}
-                  setPage={setPage}
                   onFavoriteChange={handleFavoriteChange}
                   onTotalPagesChange={setTotalPages}
                 />

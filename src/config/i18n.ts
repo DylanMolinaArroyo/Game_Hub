@@ -8,21 +8,19 @@ export const defaultNS = 'global';
 i18next
   .use(LanguageDetector)
   .use(initReactI18next)
-  .use(initReactI18next)
   .use(Backend)
   .init({
-    debug: true, 
-    fallbackLng: 'en', 
+    debug: import.meta.env.DEV,
+    fallbackLng: 'en',
     interpolation: {
-      escapeValue: false 
+      escapeValue: false
     },
     detection: {
-      
       order: ['localStorage','navigator', 'htmlTag', 'path', 'subdomain'],
       caches: ['localStorage', 'cookie']
     },
     backend:{
-      loadPath: '/src/translations/{{lng}}/global.json',
+      loadPath: '/locales/{{lng}}/global.json',
     },
     react: {useSuspense: true},
   });

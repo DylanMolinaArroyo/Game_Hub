@@ -12,11 +12,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { initializeApp } from "firebase/app";
 import AuthRoute from "./auth/AuthRoute.tsx";
-import { firebaseConfig } from "./services/firebaseConfig.ts";
-
-initializeApp(firebaseConfig);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
