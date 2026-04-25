@@ -5,7 +5,8 @@ import {
   signInWithPopup,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import gameCatalog from "../assets/gameCatalog.webp";
 import {
   Box,
   Button,
@@ -36,21 +37,21 @@ function Signup() {
 
   const signUpWithGoogle = async () => {
     setAuthing(true);
+    setError("");
 
     signInWithPopup(auth, new GoogleAuthProvider())
-      .then((response) => {
-        console.log(response.user.uid);
+      .then(() => {
         navigate("/");
       })
       .catch((error) => {
-        console.log(error);
+        setError(error.message);
         setAuthing(false);
       });
   };
 
   const signUpWithEmail = async () => {
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
+      setError(t("password_mismatch.message"));
       return;
     }
 
@@ -58,12 +59,10 @@ function Signup() {
     setError("");
 
     createUserWithEmailAndPassword(auth, email, password)
-      .then((response) => {
-        console.log(response.user.uid);
+      .then(() => {
         navigate("/");
       })
       .catch((error) => {
-        console.log(error);
         setError(error.message);
         setAuthing(false);
       });
@@ -72,7 +71,7 @@ function Signup() {
   return (
     <Box
       minH="100vh"
-      bgImage="../src/assets/gameCatalog.webp"
+      bgImage={`url(${gameCatalog})`}
       bgSize="cover"
       bgPosition="center"
     >
@@ -146,7 +145,7 @@ function Signup() {
             <Center my={4}>
               <Divider borderColor="gray.500" />
               <Text fontSize="lg" color="gray.500" mx={2} bg="#1a1a1a">
-                OR
+                {t("or.message")}
               </Text>
               <Divider borderColor="gray.500" />
             </Center>
@@ -173,7 +172,7 @@ function Signup() {
                   cursor="pointer"
                   textDecoration="underline"
                 >
-                  <a href="/login">{t("login_title.message")}</a>
+                  <Link to="/login">{t("login_title.message")}</Link>
                 </Text>
               </Text>
             </Center>

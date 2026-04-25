@@ -5,7 +5,7 @@ import { IoGameControllerOutline } from "react-icons/io5";
 import RightDrawer from "./RightDrawer";
 import "../styles.css";
 import { useEffect, useState } from "react";
-import { getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 interface Props {
   onSearch: (searchText: string) => void;
@@ -16,10 +16,11 @@ const NavBar = ({ onSearch }: Props) => {
   const auth = getAuth();
 
   useEffect(() => {
-    if (auth.currentUser) {
-      setUserPhoto(auth.currentUser.photoURL);
-    }
-  }, [auth.currentUser]);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUserPhoto(user?.photoURL ?? null);
+    });
+    return () => unsubscribe();
+  }, []);
 
   return (
     <HStack padding="10px">
