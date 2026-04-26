@@ -31,6 +31,13 @@ function Login() {
   const [error, setError] = useState("");
   const { t } = useTranslation();
 
+  const mapAuthError = (code: string) => {
+    if (
+      ["auth/user-not-found", "auth/wrong-password", "auth/invalid-credential", "auth/invalid-email"].includes(code)
+    ) return t("auth_error_credentials.message");
+    return t("auth_error_generic.message");
+  };
+
   const signInWithGoogle = async () => {
     setAuthing(true);
     setError("");
@@ -40,7 +47,7 @@ function Login() {
         navigate("/");
       })
       .catch((error) => {
-        setError(error.message);
+        setError(mapAuthError(error.code));
         setAuthing(false);
       });
   };
@@ -54,7 +61,7 @@ function Login() {
         navigate("/");
       })
       .catch((error) => {
-        setError(error.message);
+        setError(mapAuthError(error.code));
         setAuthing(false);
       });
   };

@@ -5,7 +5,8 @@ import App from "./app/App.tsx";
 import Login from "./auth/Login.tsx";
 import Signup from "./auth/Signup.tsx";
 import "./index.css";
-import theme from "./theme.ts";
+import "./config/i18n";
+import theme from "./config/theme.ts";
 import {
   BrowserRouter as Router,
   Routes,
@@ -18,7 +19,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ChakraProvider theme={theme}>
       <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-      <Router>
+      <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <Routes>
           <Route
             path="/"

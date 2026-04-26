@@ -18,9 +18,10 @@ import { Genre } from "../hooks/useGenres";
 import { FaHome } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa6";
 import { useTranslation } from "react-i18next";
-import NavBar from "../components/NavBar";
-import BrowseTab from "../components/BrowseTab";
-import FavoritesTab from "../components/FavoritesTab";
+import { NavBar, BrowseTab, FavoritesTab } from "../components";
+
+
+
 
 export interface GameQuery {
   genre: Genre | null;

@@ -32,6 +32,11 @@ function Signup() {
   const [error, setError] = useState("");
   const { t } = useTranslation();
 
+  const mapAuthError = (code: string) => {
+    if (code === "auth/email-already-in-use") return t("auth_error_email_in_use.message");
+    return t("auth_error_generic.message");
+  };
+
   const signUpWithGoogle = async () => {
     setAuthing(true);
     setError("");
@@ -41,7 +46,7 @@ function Signup() {
         navigate("/");
       })
       .catch((error) => {
-        setError(error.message);
+        setError(mapAuthError(error.code));
         setAuthing(false);
       });
   };
@@ -60,7 +65,7 @@ function Signup() {
         navigate("/");
       })
       .catch((error) => {
-        setError(error.message);
+        setError(mapAuthError(error.code));
         setAuthing(false);
       });
   };

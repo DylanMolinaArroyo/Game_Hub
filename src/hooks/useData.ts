@@ -33,7 +33,7 @@ interface FetchResponse<T> {
             });
 
         return () => controller.abort();
-    }, deps ? [...deps] : []);
+    }, deps ?? []);
 
     return { data, error, isLoading, totalPages };
 };

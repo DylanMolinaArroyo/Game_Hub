@@ -1,6 +1,6 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import apiClient from "../services/api-client";
-import { CanceledError, AxiosRequestConfig } from "axios";
+import { CanceledError } from "axios";
 
 export interface Platform {
   id: number;
@@ -28,19 +28,16 @@ export interface GameProfile {
   website: string;
 }
 
-type RefetchFunction = () => Promise<void>;
-
-const useGameProfile = (gameId: number, requestConfig?: AxiosRequestConfig) => {
+const useGameProfile = (gameId: number) => {
   const [data, setData] = useState<GameProfile | null>(null);
   const [error, setError] = useState("");
-  const [isLoading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState(true);
 
   const fetchData = useCallback(() => {
+    const controller = new AbortController();
     setLoading(true);
     return apiClient
-      .get<GameProfile>(`/games/${gameId}`, {
-        ...requestConfig,
-      })
+      .get<GameProfile>(`/games/${gameId}`, { signal: controller.signal })
       .then((res) => {
         setData(res.data);
         setLoading(false);
@@ -50,11 +47,13 @@ const useGameProfile = (gameId: number, requestConfig?: AxiosRequestConfig) => {
         setError(err.message);
         setLoading(false);
       });
-  }, [gameId, requestConfig]);
+  }, [gameId]);
 
-  const refetch: RefetchFunction = () => fetchData();
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
-  return { data, error, isLoading, refetch };
+  return { data, error, isLoading, refetch: fetchData };
 };
 
 export default useGameProfile;

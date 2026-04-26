@@ -1,24 +1,23 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import apiClient from "../services/api-client";
-import { CanceledError, AxiosRequestConfig } from "axios";
+import { CanceledError } from "axios";
 
 export interface GameImage {
   image: string;
   hidden: boolean;
 }
 
-type RefetchFunction = () => Promise<void>;
-
-const useGameImages = (gameId: number, requestConfig?: AxiosRequestConfig) => {
+const useGameImages = (gameId: number) => {
   const [data, setData] = useState<GameImage[] | null>(null);
   const [error, setError] = useState("");
-  const [isLoading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState(true);
 
   const fetchData = useCallback(() => {
+    const controller = new AbortController();
     setLoading(true);
     return apiClient
       .get<{ results: GameImage[] }>(`/games/${gameId}/screenshots`, {
-        ...requestConfig,
+        signal: controller.signal,
       })
       .then((res) => {
         setData(res.data.results);
@@ -29,11 +28,13 @@ const useGameImages = (gameId: number, requestConfig?: AxiosRequestConfig) => {
         setError(err.message);
         setLoading(false);
       });
-  }, [gameId, requestConfig]);
+  }, [gameId]);
 
-  const refetch: RefetchFunction = () => fetchData();
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
-  return { data, error, isLoading, refetch };
+  return { data, error, isLoading, refetch: fetchData };
 };
 
 export default useGameImages;
