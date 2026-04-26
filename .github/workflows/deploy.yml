@@ -12,6 +12,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: Game Hub enviroments
     steps:
       - uses: actions/checkout@v5
 
