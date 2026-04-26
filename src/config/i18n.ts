@@ -20,7 +20,7 @@ i18next
       caches: ['localStorage', 'cookie']
     },
     backend:{
-      loadPath: '/locales/{{lng}}/global.json',
+      loadPath: `${import.meta.env.BASE_URL}locales/{{lng}}/global.json`,
     },
     react: {useSuspense: true},
   });
