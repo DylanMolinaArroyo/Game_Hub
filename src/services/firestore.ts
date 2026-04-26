@@ -2,7 +2,6 @@ import {
   doc,
   setDoc,
   getDoc,
-  updateDoc,
   arrayUnion,
   arrayRemove,
 } from "firebase/firestore";
@@ -17,9 +16,7 @@ export const addToFavorites = async (game: Game) => {
   if (!user) return;
 
   const userFavoritesRef = doc(db, "Favorites", user.uid);
-  await updateDoc(userFavoritesRef, {
-    games: arrayUnion(game),
-  });
+  await setDoc(userFavoritesRef, { games: arrayUnion(game) }, { merge: true });
 };
 
 export const removeFromFavorites = async (game: Game) => {
@@ -27,9 +24,7 @@ export const removeFromFavorites = async (game: Game) => {
   if (!user) return;
 
   const userFavoritesRef = doc(db, "Favorites", user.uid);
-  await updateDoc(userFavoritesRef, {
-    games: arrayRemove(game),
-  });
+  await setDoc(userFavoritesRef, { games: arrayRemove(game) }, { merge: true });
 };
 
 export const getFavorites = async (): Promise<Game[]> => {
