@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <script>
+      var path = window.location.pathname.replace('/Game_Hub', '') || '/';
+      sessionStorage.setItem('redirect', path);
+      window.location.replace('/Game_Hub/');
+    </script>
+  </head>
+</html>

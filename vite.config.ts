@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
+  base: '/Game_Hub/',
   build: {
     // Inline assets smaller than 10KB as base64 to save HTTP round-trips
     assetsInlineLimit: 10240,
