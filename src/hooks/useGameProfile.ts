@@ -1,6 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
 import apiClient from "../services/api-client";
-import { CanceledError } from "axios";
 
 export interface Platform {
   id: number;
@@ -39,11 +38,11 @@ const useGameProfile = (gameId: number) => {
     return apiClient
       .get<GameProfile>(`/games/${gameId}`, { signal: controller.signal })
       .then((res) => {
-        setData(res.data);
+        setData(res);
         setLoading(false);
       })
       .catch((err) => {
-        if (err instanceof CanceledError) return;
+        if (err.name === "AbortError") return;
         setError(err.message);
         setLoading(false);
       });

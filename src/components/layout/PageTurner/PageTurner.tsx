@@ -1,5 +1,5 @@
-import { Flex, Button, Text } from "@chakra-ui/react";
-import { ArrowBackIcon, ArrowForwardIcon } from "@chakra-ui/icons";
+import { Flex, Button, Text, Icon } from "@chakra-ui/react";
+import { IoArrowBack, IoArrowForward } from "react-icons/io5";
 import { PaginationControlsProps } from "./PageTurner.types";
 
 
@@ -18,7 +18,7 @@ const PageTurner = ({
         borderRadius="full"
         padding="8px"
       >
-        <ArrowBackIcon />
+        <Icon as={IoArrowBack} />
       </Button>
       <Text>
         {page} / {totalPages}
@@ -30,7 +30,7 @@ const PageTurner = ({
         borderRadius="full"
         padding="8px"
       >
-        <ArrowForwardIcon />
+        <Icon as={IoArrowForward} />
       </Button>
     </Flex>
   );

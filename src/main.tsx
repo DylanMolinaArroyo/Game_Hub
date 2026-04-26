@@ -4,7 +4,6 @@ import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
 import App from "./app/App.tsx";
 import Login from "./auth/Login.tsx";
 import Signup from "./auth/Signup.tsx";
-import "./index.css";
 import "./config/i18n";
 import theme from "./config/theme.ts";
 import {

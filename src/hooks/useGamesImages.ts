@@ -1,6 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
 import apiClient from "../services/api-client";
-import { CanceledError } from "axios";
 
 export interface GameImage {
   image: string;
@@ -16,15 +15,13 @@ const useGameImages = (gameId: number) => {
     const controller = new AbortController();
     setLoading(true);
     return apiClient
-      .get<{ results: GameImage[] }>(`/games/${gameId}/screenshots`, {
-        signal: controller.signal,
-      })
+      .get<{ results: GameImage[] }>(`/games/${gameId}/screenshots`, { signal: controller.signal })
       .then((res) => {
-        setData(res.data.results);
+        setData(res.results);
         setLoading(false);
       })
       .catch((err) => {
-        if (err instanceof CanceledError) return;
+        if (err.name === "AbortError") return;
         setError(err.message);
         setLoading(false);
       });

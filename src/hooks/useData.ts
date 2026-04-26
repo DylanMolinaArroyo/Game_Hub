@@ -1,42 +1,40 @@
 import { useEffect, useState } from "react";
-import apiClient from "../services/api-client";
-import { CanceledError, AxiosRequestConfig } from "axios";
-
+import apiClient, { RequestConfig } from "../services/api-client";
 
 interface FetchResponse<T> {
-    count: number;
-    results: T[];
- }
+  count: number;
+  results: T[];
+}
 
- const useData = <T>(endpoint: string, requestConfig?: AxiosRequestConfig, deps?: any[]) => {
-    const [data, setData] = useState<T[]>([]);
-    const [error, setError] = useState("");
-    const [isLoading, setLoading] = useState(false);
-    const [totalPages, setTotalPages] = useState<number>(0);
-    useEffect(() => {
-        const controller = new AbortController();
+const useData = <T>(endpoint: string, requestConfig?: RequestConfig, deps?: any[]) => {
+  const [data, setData] = useState<T[]>([]);
+  const [error, setError] = useState("");
+  const [isLoading, setLoading] = useState(false);
+  const [totalPages, setTotalPages] = useState<number>(0);
 
-        setLoading(true);
-        setData([]);
+  useEffect(() => {
+    const controller = new AbortController();
 
-        apiClient
-            .get<FetchResponse<T>>(endpoint, { signal: controller.signal, ...requestConfig })
-            .then((res) => {
-                setData(res.data.results);
-                setTotalPages(Math.ceil(res.data.count / (requestConfig?.params?.page_size ?? 20)));
-                setLoading(false);
-            })
-            .catch((err) => {
-                if (err instanceof CanceledError) return;
-                setError(err.message);
-                setLoading(false);
-            });
+    setLoading(true);
+    setData([]);
 
-        return () => controller.abort();
-    }, deps ?? []);
+    apiClient
+      .get<FetchResponse<T>>(endpoint, { signal: controller.signal, ...requestConfig })
+      .then((res) => {
+        setData(res.results);
+        setTotalPages(Math.ceil(res.count / ((requestConfig?.params?.page_size as number) ?? 20)));
+        setLoading(false);
+      })
+      .catch((err) => {
+        if (err.name === "AbortError") return;
+        setError(err.message);
+        setLoading(false);
+      });
 
-    return { data, error, isLoading, totalPages };
+    return () => controller.abort();
+  }, deps ?? []);
+
+  return { data, error, isLoading, totalPages };
 };
-
 
 export default useData;

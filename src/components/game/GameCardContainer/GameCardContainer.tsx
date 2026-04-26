@@ -1,7 +1,7 @@
 import { Box, BoxProps, Button, Icon } from "@chakra-ui/react";
 import { memo, ReactNode, useState } from "react";
 import { FaHeart } from "react-icons/fa";
-import { IoMdHeartDislike } from "react-icons/io";
+import { IoHeartDislike } from "react-icons/io5";
 
 interface Props extends BoxProps {
   children: ReactNode;
@@ -42,7 +42,7 @@ const GameCardContainer = memo(function GameCardContainer({
           padding={1}
         >
           <Icon
-            as={isFavorite ? IoMdHeartDislike : FaHeart}
+            as={isFavorite ? IoHeartDislike : FaHeart}
             color="red.400"
             boxSize={6}
           />

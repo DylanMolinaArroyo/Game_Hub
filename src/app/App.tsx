@@ -15,8 +15,7 @@ import {
 import { useCallback, useState } from "react";
 import { Platform } from "../hooks/useGames";
 import { Genre } from "../hooks/useGenres";
-import { FaHome } from "react-icons/fa";
-import { FaHeart } from "react-icons/fa6";
+import { FaHome, FaHeart } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import { NavBar, BrowseTab, FavoritesTab } from "../components";
 
