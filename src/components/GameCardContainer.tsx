@@ -36,8 +36,8 @@ const GameCardContainer = ({
           right={2}
           onClick={onFavoriteClick}
           zIndex={1}
-          backgroundColor="rgba(255, 255, 255, 0.8)"
-          _hover={{ backgroundColor: "rgba(255, 255, 255, 1)" }}
+          backgroundColor="whiteAlpha.800"
+          _hover={{ backgroundColor: "white" }}
           borderRadius="full"
           padding={1}
         >

@@ -11,18 +11,16 @@ import {
   HStack,
   Divider,
   VStack,
-  useColorModeValue,
   Grid,
   GridItem,
-  Center,
   ScaleFade,
   Stat,
   StatNumber,
   StatLabel,
   Icon,
-  Card,
   Link,
   Button,
+  Badge,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import useGameProfile from "../hooks/useGameProfile";
@@ -45,6 +43,8 @@ interface Props {
   gameId: number;
 }
 
+const DESCRIPTION_LIMIT = 300;
+
 const GameModal = ({ isOpen, onClose, gameId }: Props) => {
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [selectedMedia, setSelectedMedia] = useState<string | null>(null);
@@ -58,17 +58,6 @@ const GameModal = ({ isOpen, onClose, gameId }: Props) => {
   const { data: gameVideos, refetch: refetchVideos } = useGameVideos(gameId);
   const { data: gameImages, refetch: refretchImages } = useGameImages(gameId);
   const { t } = useTranslation();
-
-  const modalBg = useColorModeValue("gray.50", "gray.800");
-  const headingColor = useColorModeValue("gray.700", "whiteAlpha.900");
-  const closeButtonColor = useColorModeValue(
-    "blackAlpha.700",
-    "whiteAlpha.900"
-  );
-
-  const linkColor = useColorModeValue("blue.500", "blue.300");
-  const linkHoverColor = useColorModeValue("blue.600", "blue.400");
-  const linkFocusColor = useColorModeValue("blue.700", "blue.500");
 
   useEffect(() => {
     if (isOpen && !isDataLoaded) {
@@ -89,228 +78,285 @@ const GameModal = ({ isOpen, onClose, gameId }: Props) => {
     }
   }, [gameProfile, gameVideos, gameImages]);
 
-  const toggleDescription = () => {
-    setIsDescriptionExpanded(!isDescriptionExpanded);
-  };
-
-  const truncatedDescription = gameProfile?.description.slice(0, 100) + "...";
-
   return (
     <ScaleFade initialScale={0.9} in={isOpen}>
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
-        <ModalOverlay />
+      <Modal isOpen={isOpen} onClose={onClose} isCentered scrollBehavior="inside">
+        <ModalOverlay backdropFilter="blur(4px)" />
         <ModalContent
-          maxWidth="60vw"
-          bg={modalBg}
-          borderRadius="md"
+          maxWidth={{ base: "95vw", md: "75vw", lg: "60vw" }}
+          maxH="90vh"
+          bg="surface.modal"
+          borderRadius="xl"
           overflow="hidden"
         >
-          <ModalBody padding={2}>
+          <ModalBody p={0} display="flex" flexDirection="column">
             {isLoading ? (
-              <GameModalSkeleton isOpen={true} onClose={() => {}} />
+              <Box p={5}>
+                <GameModalSkeleton />
+              </Box>
             ) : error || !gameProfile ? (
-              <Text>{t("loading_error.message")}</Text>
+              <Box p={6}>
+                <Text color="text.error">{t("loading_error.message")}</Text>
+              </Box>
             ) : (
               <>
-                <HStack
-                  padding={4}
-                  bg="normal"
-                  color={headingColor}
-                  marginBottom={1}
+                {/* Sticky header */}
+                <Box
+                  px={5}
+                  py={4}
+                  borderBottom="1px solid"
+                  borderColor="border.subtle"
+                  position="sticky"
+                  top={0}
+                  bg="surface.modal"
+                  zIndex={1}
                 >
-                  <Heading fontSize="lg" fontWeight="normal">
+                  <Heading
+                    size="md"
+                    color="text.heading"
+                    pr={10}
+                    noOfLines={1}
+                  >
                     {gameProfile.name}
                   </Heading>
                   <ModalCloseButton
-                    color={closeButtonColor}
-                    _hover={{ color: "red.500" }}
-                    size="lg"
+                    top={3}
+                    right={4}
+                    color="text.muted"
+                    _hover={{ color: "red.500", bg: "surface.hover" }}
+                    borderRadius="full"
                   />
-                </HStack>
-                <Card padding={3} marginBottom={4}>
-                  <Grid templateColumns="repeat(2, 1fr)" gap={4}>
+                </Box>
+
+                {/* Scrollable content */}
+                <Box overflowY="auto" px={5} py={5}>
+                  {/* Cover + details */}
+                  <Grid
+                    templateColumns={{ base: "1fr", md: "1fr 1fr" }}
+                    gap={5}
+                    mb={6}
+                  >
                     <GridItem>
                       <Image
-                        borderRadius="md"
+                        borderRadius="lg"
                         src={getCroppedImageUrl(gameProfile.background_image)}
                         alt={gameProfile.name}
                         objectFit="cover"
-                        maxHeight="400px"
+                        w="100%"
+                        h={{ base: "200px", md: "320px" }}
                       />
                     </GridItem>
                     <GridItem>
-                      <Heading size="lg">{gameProfile.name}</Heading>
-                      <Center height="20px">
-                        <Divider
-                          orientation="horizontal"
-                          borderWidth="2px"
-                          width="full"
-                          color={headingColor}
-                        />
-                      </Center>
-                      <Grid templateColumns="repeat(2, 1fr)" gap={4}>
-                        <GridItem>
+                      <VStack align="stretch" spacing={4} h="100%">
+                        <HStack spacing={4} flexWrap="wrap">
                           <CriticScoreExpand score={gameProfile.metacritic} />
-                        </GridItem>
-                        <GridItem>
                           <Stat>
-                            <StatLabel fontSize={20}>
+                            <StatLabel fontSize="md">
                               {t("play_time.message")}
                             </StatLabel>
-                            <StatNumber>
+                            <StatNumber fontSize="xl">
                               <Icon
                                 as={MdAccessTime}
-                                size={"30px"}
-                                color={"#553C9A"}
-                              />{" "}
-                              {gameProfile.playtime} {t("hours.message")}
+                                boxSize={5}
+                                color="purple.400"
+                                mr={1}
+                              />
+                              {gameProfile.playtime}h
                             </StatNumber>
                           </Stat>
-                        </GridItem>
-                      </Grid>
-                      <HStack marginBottom={2} marginTop={2}>
-                        <Heading size="md" color={headingColor}>
-                          {t("release_date.message")}
-                        </Heading>
-                        <Text fontSize="18px" color={headingColor}>
-                          {gameProfile.released}
-                        </Text>
-                      </HStack>
-                      <Heading
-                        size="md"
-                        color={headingColor}
-                        marginBottom={2}
-                        marginTop={2}
-                      >
-                        {t("developers.message")}
-                      </Heading>
-                      <DeveloperList
-                        developers={gameProfile.developers}
-                      ></DeveloperList>
-                      <Link
-                        href={gameProfile.website}
-                        isExternal
-                        fontSize="15px"
-                        color={linkColor}
-                        _hover={{
-                          color: linkHoverColor,
-                          textDecoration: "underline",
-                        }}
-                        _focus={{ color: linkFocusColor, boxShadow: "outline" }}
-                        display="inline-flex"
-                        alignItems="center"
-                      >
-                        {t("developer_site.message")}
-                        <Icon as={FaExternalLinkAlt} ml={2} />
-                      </Link>
+                        </HStack>
+
+                        <Divider borderColor="border.subtle" />
+
+                        <Box>
+                          <Text
+                            fontSize="xs"
+                            fontWeight="semibold"
+                            color="text.muted"
+                            textTransform="uppercase"
+                            letterSpacing="wider"
+                            mb={1}
+                          >
+                            {t("release_date.message")}
+                          </Text>
+                          <Badge
+                            colorScheme="blue"
+                            fontSize="sm"
+                            px={2}
+                            py={0.5}
+                            borderRadius="full"
+                          >
+                            {gameProfile.released}
+                          </Badge>
+                        </Box>
+
+                        <Box>
+                          <Text
+                            fontSize="xs"
+                            fontWeight="semibold"
+                            color="text.muted"
+                            textTransform="uppercase"
+                            letterSpacing="wider"
+                            mb={1}
+                          >
+                            {t("developers.message")}
+                          </Text>
+                          <DeveloperList developers={gameProfile.developers} />
+                        </Box>
+
+                        {gameProfile.website && (
+                          <Link
+                            href={gameProfile.website}
+                            isExternal
+                            fontSize="sm"
+                            color="link.default"
+                            _hover={{ color: "link.hover", textDecoration: "underline" }}
+                            display="inline-flex"
+                            alignItems="center"
+                            gap={1}
+                            mt="auto"
+                          >
+                            {t("developer_site.message")}
+                            <Icon as={FaExternalLinkAlt} boxSize={3} />
+                          </Link>
+                        )}
+                      </VStack>
                     </GridItem>
                   </Grid>
-                </Card>
 
-                <Heading size="md" color={headingColor} marginBottom={2}>
-                  {t("platforms.message")}
-                </Heading>
-                <PlatformIconList
-                  platforms={gameProfile.parent_platforms?.map(
-                    (p) => p.platform
-                  )}
-                  showName={true}
-                />
+                  {/* Platforms */}
+                  <Box mb={4}>
+                    <Text
+                      fontSize="xs"
+                      fontWeight="semibold"
+                      color="text.muted"
+                      textTransform="uppercase"
+                      letterSpacing="wider"
+                      mb={2}
+                    >
+                      {t("platforms.message")}
+                    </Text>
+                    <PlatformIconList
+                      platforms={gameProfile.parent_platforms?.map((p) => p.platform)}
+                      showName={true}
+                    />
+                  </Box>
 
-                <Center height="20px">
-                  <Divider
-                    orientation="horizontal"
-                    borderWidth="2px"
-                    width="full"
-                    color={headingColor}
-                  />
-                </Center>
-                <GridItem colSpan={2}>
-                  {selectedMedia?.endsWith(".mp4") ? (
-                    <video controls width="100%" src={selectedMedia} />
-                  ) : (
-                    <Image
-                      borderRadius="md"
-                      src={selectedMedia || ""}
-                      alt={gameProfile.name}
-                      objectFit="cover"
-                      maxHeight="400px"
-                      width="100%"
-                    />
-                  )}
-                </GridItem>
-                <HStack
-                  overflowX="scroll"
-                  overscrollBehaviorX="revert"
-                  paddingY={4}
-                >
-                  <HStack paddingX={"10px"}>
-                    {gameVideos?.slice(0, 2).map((trailer) => (
-                      <Image
-                        key={trailer.id}
-                        src={trailer.preview}
-                        width="150px"
-                        height="auto"
-                        objectFit="cover"
-                        cursor="pointer"
-                        onClick={() => setSelectedMedia(trailer.data.max)}
-                        marginX={2}
+                  <Divider borderColor="border.subtle" mb={4} />
+
+                  {/* Selected media */}
+                  <Box mb={3} borderRadius="lg" overflow="hidden">
+                    {selectedMedia?.endsWith(".mp4") ? (
+                      <video
+                        controls
+                        width="100%"
+                        src={selectedMedia}
+                        style={{ display: "block", maxHeight: "360px" }}
                       />
-                    ))}
-                    {gameImages?.slice(0, 8).map((image, index) => (
+                    ) : (
                       <Image
-                        key={index}
-                        src={image.image}
-                        width="150px"
-                        height="auto"
+                        src={selectedMedia || ""}
+                        alt={gameProfile.name}
                         objectFit="cover"
-                        cursor="pointer"
-                        onClick={() => setSelectedMedia(image.image)}
-                        marginX={2}
+                        w="100%"
+                        maxH="360px"
                       />
-                    ))}
-                  </HStack>
-                </HStack>
-                <VStack spacing={4} align="stretch" marginTop={4}>
-                  <Center height="20px">
-                    <Divider
-                      orientation="horizontal"
-                      borderWidth="2px"
-                      width="full"
-                      color={headingColor}
-                    />
-                  </Center>
+                    )}
+                  </Box>
+
+                  {/* Thumbnail strip */}
+                  {(gameVideos?.length || gameImages?.length) ? (
+                    <HStack
+                      spacing={2}
+                      overflowX="auto"
+                      pb={3}
+                      mb={4}
+                      sx={{ "&::-webkit-scrollbar": { height: "4px" }, "&::-webkit-scrollbar-thumb": { borderRadius: "full", bg: "border.subtle" } }}
+                    >
+                      {gameVideos?.slice(0, 2).map((trailer) => (
+                        <Box
+                          key={trailer.id}
+                          as="button"
+                          flexShrink={0}
+                          borderRadius="md"
+                          overflow="hidden"
+                          outline="2px solid"
+                          outlineColor={selectedMedia === trailer.data.max ? "blue.400" : "transparent"}
+                          onClick={() => setSelectedMedia(trailer.data.max)}
+                          transition="outline-color 0.15s"
+                          _hover={{ outlineColor: "blue.300" }}
+                        >
+                          <Image
+                            src={trailer.preview}
+                            w="120px"
+                            h="70px"
+                            objectFit="cover"
+                          />
+                        </Box>
+                      ))}
+                      {gameImages?.slice(0, 8).map((image, index) => (
+                        <Box
+                          key={index}
+                          as="button"
+                          flexShrink={0}
+                          borderRadius="md"
+                          overflow="hidden"
+                          outline="2px solid"
+                          outlineColor={selectedMedia === image.image ? "blue.400" : "transparent"}
+                          onClick={() => setSelectedMedia(image.image)}
+                          transition="outline-color 0.15s"
+                          _hover={{ outlineColor: "blue.300" }}
+                        >
+                          <Image
+                            src={image.image}
+                            w="120px"
+                            h="70px"
+                            objectFit="cover"
+                          />
+                        </Box>
+                      ))}
+                    </HStack>
+                  ) : null}
+
+                  <Divider borderColor="border.subtle" mb={4} />
+
+                  {/* Description */}
                   <Box>
-                    <Heading size="md" color={headingColor} marginBottom={2}>
+                    <Text
+                      fontSize="xs"
+                      fontWeight="semibold"
+                      color="text.muted"
+                      textTransform="uppercase"
+                      letterSpacing="wider"
+                      mb={2}
+                    >
                       {t("description.message")}
-                    </Heading>
-                    <Text textAlign="justify">
+                    </Text>
+                    <Text color="text.heading" lineHeight="tall">
                       <CleanDescription
                         description={
                           isDescriptionExpanded
                             ? gameProfile.description
-                            : truncatedDescription
+                            : gameProfile.description.slice(0, DESCRIPTION_LIMIT) + "..."
                         }
                         targetLanguage={i18n.language}
                       />
                     </Text>
-                    <Button
-                      onClick={toggleDescription}
-                      mt={2}
-                      variant="link"
-                      colorScheme="blue"
-                    >
-                      {isDescriptionExpanded
-                        ? t("read_less.message")
-                        : t("read_more.message")}
-                    </Button>
+                    {gameProfile.description.length > DESCRIPTION_LIMIT && (
+                      <Button
+                        onClick={() => setIsDescriptionExpanded((v) => !v)}
+                        mt={2}
+                        variant="link"
+                        colorScheme="blue"
+                        size="sm"
+                      >
+                        {isDescriptionExpanded
+                          ? t("read_less.message")
+                          : t("read_more.message")}
+                      </Button>
+                    )}
                   </Box>
-                  <Divider
-                    orientation="horizontal"
-                    borderWidth="2px"
-                    width="full"
-                  />
-                </VStack>
+                </Box>
               </>
             )}
           </ModalBody>

@@ -14,7 +14,7 @@ const GameHeading = ({ gameQuery, targetLanguage }: Props) => {
   const translatedHeading = useTranslateText(heading, targetLanguage);
 
   return (
-    <Heading as="h1" marginY={5} fontSize="5xl">
+    <Heading as="h1" marginY={5} fontSize={{ base: "3xl", md: "5xl" }}>
       {translatedHeading}
     </Heading>
   );

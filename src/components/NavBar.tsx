@@ -1,36 +1,34 @@
-import { Avatar, HStack, Icon } from "@chakra-ui/react";
-import ColorModeSwitch from "./ColorModeSwitch";
-import SearchInput from "./SearchInput";
+import { Flex, HStack, Icon, Text } from "@chakra-ui/react";
 import { IoGameControllerOutline } from "react-icons/io5";
 import RightDrawer from "./RightDrawer";
 import "../styles.css";
-import { useEffect, useState } from "react";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 
-interface Props {
-  onSearch: (searchText: string) => void;
-}
-
-const NavBar = ({ onSearch }: Props) => {
-  const [userPhoto, setUserPhoto] = useState<string | null>(null);
-  const auth = getAuth();
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUserPhoto(user?.photoURL ?? null);
-    });
-    return () => unsubscribe();
-  }, []);
-
-  return (
-    <HStack padding="10px">
-      <Icon as={IoGameControllerOutline} boxSize="60px" className="rgb-logo" />
-      <SearchInput onSearch={onSearch} />
-      <ColorModeSwitch />
-      {userPhoto && <Avatar src={userPhoto} size="sm" />}
-      <RightDrawer />
+const NavBar = () => (
+  <Flex
+    px={{ base: 4, md: 8, lg: 12 }}
+    py={{ base: 3, md: 4 }}
+    align="center"
+    justify="space-between"
+    bg="surface"
+    borderBottom="1px solid"
+    borderColor="border.subtle"
+  >
+    <HStack spacing={2}>
+      <Icon
+        as={IoGameControllerOutline}
+        boxSize={{ base: "28px", md: "32px" }}
+        className="rgb-logo"
+      />
+      <Text
+        fontSize={{ base: "lg", md: "2xl" }}
+        fontWeight="bold"
+        letterSpacing="tight"
+      >
+        Game Hub
+      </Text>
     </HStack>
-  );
-};
+    <RightDrawer />
+  </Flex>
+);
 
 export default NavBar;

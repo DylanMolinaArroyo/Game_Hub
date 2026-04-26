@@ -1,12 +1,4 @@
-import {
-  Box,
-  SimpleGrid,
-  Text,
-  Flex,
-  Heading,
-  Icon,
-  useColorModeValue,
-} from "@chakra-ui/react";
+import { Box, SimpleGrid, Text, Flex, Heading, Icon } from "@chakra-ui/react";
 import useGames from "../hooks/useGames";
 import GameCard from "./GameCard";
 import GameCardSkeleton from "./GameCardSkeleton";
@@ -38,7 +30,6 @@ const GameGrid = ({
   const { data, error, isLoading, totalPages } = useGames(gameQuery, page);
   const skeletonCount = isLoading ? Array(8).fill(null) : [];
   const [favoriteGames, setFavoriteGames] = useState<Game[]>([]);
-  const errorTextColor = useColorModeValue("red.800", "red.300");
 
   useEffect(() => {
     const fetchFavorites = async () => {
@@ -89,7 +80,7 @@ const GameGrid = ({
           Something went wrong
         </Heading>
         <Icon as={TbMoodCry} boxSize={20} />
-        <Text color={errorTextColor} mt={4}>
+        <Text color="text.error" mt={4}>
           {error}
         </Text>
       </Flex>

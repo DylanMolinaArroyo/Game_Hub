@@ -6,7 +6,6 @@ import {
   CardBody,
   HStack,
   Button,
-  useColorModeValue,
   Fade,
   Tooltip,
 } from "@chakra-ui/react";
@@ -24,9 +23,6 @@ const GameCard = ({ game }: Props) => {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const handleOpen = () => setIsOpen(true);
   const handleClose = () => setIsOpen(false);
-  const headingColor = useColorModeValue("gray.700", "whiteAlpha.900");
-  const headingColor2 = useColorModeValue("#ededed", "#202020");
-
   return (
     <>
       <Card borderRadius="md" boxShadow="md" overflow="hidden">
@@ -40,7 +36,7 @@ const GameCard = ({ game }: Props) => {
           />
         </Fade>
 
-        <CardBody backgroundColor={headingColor2}>
+        <CardBody backgroundColor="surface">
           <HStack justifyContent="space-between" marginBottom={3}>
             <PlatformIconList
               platforms={game.parent_platforms?.map((p) => p.platform)}
@@ -61,7 +57,7 @@ const GameCard = ({ game }: Props) => {
               fontSize="2xl"
               fontWeight="bold"
               variant="link"
-              color={headingColor}
+              color="text.heading"
               maxWidth="250px"
               textAlign="left"
               display="block"

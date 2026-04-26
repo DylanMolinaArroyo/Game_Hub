@@ -17,14 +17,11 @@ import {
   Input,
   Stack,
   Text,
-  useColorModeValue,
 } from "@chakra-ui/react";
 import { FcGoogle } from "react-icons/fc";
 import { useTranslation } from "react-i18next";
 
 function Signup() {
-  const headingColor = useColorModeValue("gray.700", "whiteAlpha.900");
-
   const auth = getAuth();
   const navigate = useNavigate();
 
@@ -77,20 +74,20 @@ function Signup() {
     >
       <Center h="100vh">
         <Box
-          w="50%"
+          w={{ base: "92%", sm: "75%", md: "50%" }}
           bg="#1a1a1a"
-          p={10}
+          p={{ base: 6, md: 10 }}
           flexDirection="column"
           justifyContent="center"
           borderRadius={15}
           maxW="400px"
         >
-          <Box maxW="300px" mx="auto">
+          <Box maxW="100%" mx="auto">
             <Heading
               as="h3"
               size="xl"
               mb={2}
-              color={headingColor}
+              color="text.heading"
               textAlign="center"
             >
               {t("sign_up.message")}
@@ -135,7 +132,7 @@ function Signup() {
             <Button
               onClick={signUpWithEmail}
               isLoading={authing}
-              color={headingColor}
+              color="text.heading"
               w="100%"
               mb={1}
             >

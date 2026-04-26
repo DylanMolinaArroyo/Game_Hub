@@ -2,36 +2,25 @@ import {
   Alert,
   AlertIcon,
   Box,
-  Flex,
   Grid,
   GridItem,
-  Heading,
   Icon,
-  Show,
   SlideFade,
   Tab,
   TabList,
   TabPanel,
   TabPanels,
   Tabs,
-  Text,
 } from "@chakra-ui/react";
-import NavBar from "../components/NavBar";
-import GameGrid from "../components/GameGrid";
-import GenreList from "../components/GenreList";
 import { useCallback, useState } from "react";
-import { Genre } from "../hooks/useGenres";
-import PlatformSelector from "../components/PlatformSelector";
 import { Platform } from "../hooks/useGames";
-import SortSelector from "../components/SortSelector";
-import GameHeading from "../components/GameHeading";
-import ClearFiltersButton from "../components/ClearFiltersButton";
+import { Genre } from "../hooks/useGenres";
 import { FaHome } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa6";
-import FavoritesGrid from "../components/FavoritesGrid";
-import PageTurner from "../components/PageTurner";
 import { useTranslation } from "react-i18next";
-import i18n from "../config/i18n";
+import NavBar from "../components/NavBar";
+import BrowseTab from "../components/BrowseTab";
+import FavoritesTab from "../components/FavoritesTab";
 
 export interface GameQuery {
   genre: Genre | null;
@@ -41,23 +30,10 @@ export interface GameQuery {
 }
 
 function App() {
-  const [gameQuery, setGameQuery] = useState<GameQuery>({} as GameQuery);
-  const [page, setPage] = useState(1);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [alertStatus, setAlertStatus] = useState<"success" | "error">(
     "success",
   );
-  const [totalPages, setTotalPages] = useState(0);
-
-  const handleClearFilters = () => {
-    setGameQuery({
-      genre: null,
-      platform: null,
-      sortOrder: "",
-      searchText: "",
-    });
-    setPage(1);
-  };
 
   const handleFavoriteChange = useCallback(
     (message: string, status: "success" | "error") => {
@@ -68,127 +44,39 @@ function App() {
     [],
   );
 
-  const isFilterApplied =
-    gameQuery.genre ||
-    gameQuery.platform ||
-    gameQuery.sortOrder ||
-    gameQuery.searchText;
   const { t } = useTranslation();
+
   return (
-    <Grid
-      templateAreas={{
-        base: '"nav" "main"',
-        lg: '"nav nav" "aside main"',
-      }}
-      templateColumns={{
-        base: "1fr",
-        lg: "250px 1fr",
-      }}
-    >
+    <Grid templateAreas='"nav" "main"' templateColumns="1fr">
       <GridItem area="nav">
-        <NavBar
-          onSearch={(searchText) => setGameQuery({ ...gameQuery, searchText })}
-        />
+        <NavBar />
       </GridItem>
-      <Show above="lg">
-        <GridItem area="aside" paddingX={5}>
-          <GenreList
-            selectedGenre={gameQuery.genre}
-            onSelectGenre={(genre) => setGameQuery({ ...gameQuery, genre })}
-          />
-        </GridItem>
-        <Tabs variant="soft-rounded">
-          <TabList paddingLeft={5} whiteSpace="normal">
+
+      <GridItem area="main">
+        <Tabs variant="brand">
+          <TabList>
             <Tab>
-              <Icon as={FaHome} boxSize={5} />
-              <Text paddingX={2}>General</Text>
+              <Icon as={FaHome} boxSize={4} />
+              General
             </Tab>
             <Tab>
-              <Icon as={FaHeart} boxSize={5} />
-              <Text paddingX={2}>{t("favorites.message")}</Text>
+              <Icon as={FaHeart} boxSize={4} />
+              {t("favorites.message")}
             </Tab>
           </TabList>
+
           <TabPanels>
             <TabPanel>
-              <GridItem area="main">
-                <Box paddingLeft={2}>
-                  <GameHeading
-                    gameQuery={gameQuery}
-                    targetLanguage={i18n.language}
-                  />
-                  <Flex marginBottom={8} position="relative">
-                    <Box marginRight={5}>
-                      <PlatformSelector
-                        selectedPlatform={gameQuery.platform}
-                        onSelectPlatform={(platform) => {
-                          setGameQuery({ ...gameQuery, platform });
-                          setPage(1);
-                        }}
-                      />
-                    </Box>
-                    <SortSelector
-                      sortOrder={gameQuery.sortOrder}
-                      onSelectSortOrder={(sortOrder) => {
-                        setGameQuery({ ...gameQuery, sortOrder });
-                        setPage(1);
-                      }}
-                    />
-                    {isFilterApplied && (
-                      <Box marginLeft="auto">
-                        <ClearFiltersButton onClick={handleClearFilters} />
-                      </Box>
-                    )}
-                    <Box
-                      position="absolute"
-                      left="50%"
-                      transform="translateX(-50%)"
-                      bottom="1"
-                      top="0"
-                      zIndex={1}
-                    >
-                      <PageTurner
-                        page={page}
-                        totalPages={totalPages}
-                        onPreviousPage={() =>
-                          setPage((prevPage) => prevPage - 1)
-                        }
-                        onNextPage={() => setPage((prevPage) => prevPage + 1)}
-                      />
-                    </Box>
-                  </Flex>
-                </Box>
-
-                <GameGrid
-                  gameQuery={gameQuery}
-                  page={page}
-                  onFavoriteChange={handleFavoriteChange}
-                  onTotalPagesChange={setTotalPages}
-                />
-                <Box
-                  position="absolute"
-                  justifyContent="center"
-                  alignItems="center"
-                  left="50%"
-                  transform="translateX(-50%)"
-                >
-                  <PageTurner
-                    page={page}
-                    totalPages={totalPages}
-                    onPreviousPage={() => setPage((prevPage) => prevPage - 1)}
-                    onNextPage={() => setPage((prevPage) => prevPage + 1)}
-                  />
-                </Box>
-              </GridItem>
+              <BrowseTab onFavoriteChange={handleFavoriteChange} />
             </TabPanel>
+
             <TabPanel>
-              <Heading as="h1" marginY={5} fontSize="5xl" paddingLeft={2}>
-                {t("favorite_games.message")}
-              </Heading>
-              <FavoritesGrid updateFavorites={handleFavoriteChange} />
+              <FavoritesTab onFavoriteChange={handleFavoriteChange} />
             </TabPanel>
           </TabPanels>
         </Tabs>
-      </Show>
+      </GridItem>
+
       {alertMessage && (
         <Box position="fixed" bottom="20px" right="20px" zIndex={1000}>
           <SlideFade in={!!alertMessage} offsetY="20px">

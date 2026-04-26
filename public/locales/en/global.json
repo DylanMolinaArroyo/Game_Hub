@@ -129,8 +129,17 @@
   "already_have_account": {
     "message": "Already have an account?"
   },
+  "login_title": {
+    "message": "Login"
+  },
+  "login_with_email_and_password": {
+    "message": "Login with Email & Password"
+  },
+  "login_with_google": {
+    "message": "Login with Google"
+  },
   "welcome_message": {
-    "message": "¡Bienvenido! Por favor, ingresa tu información a continuación para comenzar."
+    "message": "Welcome! Please enter your information below to get started."
   }, "welcome_back": {
     "message": "Welcome Back! Please enter your details."
   },

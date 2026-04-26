@@ -7,7 +7,6 @@ import {
   Image,
   Heading,
   Card,
-  useColorModeValue,
 } from "@chakra-ui/react";
 import useGenres from "../hooks/useGenres";
 import getCroppedImageUrl from "../services/image-url";
@@ -21,9 +20,6 @@ interface Props {
 
 const GenreList = ({ selectedGenre, onSelectGenre }: Props) => {
   const { data, isLoading, error } = useGenres();
-  const headingColor = useColorModeValue("gray.700", "whiteAlpha.900");
-  const headingColor2 = useColorModeValue("#ededed", "#202020");
-
   const { t } = useTranslation();
 
   if (error) return null;
@@ -33,7 +29,7 @@ const GenreList = ({ selectedGenre, onSelectGenre }: Props) => {
   return (
     <Card
       padding={4}
-      backgroundColor={headingColor2}
+      backgroundColor="surface"
       borderRadius="md"
       boxShadow="md"
     >
@@ -41,7 +37,7 @@ const GenreList = ({ selectedGenre, onSelectGenre }: Props) => {
         fontSize="2xl"
         marginTop={1}
         marginBottom={6}
-        color={headingColor}
+        color="text.heading"
       >
         {t("genres.message")}
       </Heading>
@@ -60,11 +56,11 @@ const GenreList = ({ selectedGenre, onSelectGenre }: Props) => {
                 whiteSpace="normal"
                 textAlign="left"
                 fontWeight={genre.id === selectedGenre?.id ? "bold" : "normal"}
-                color={headingColor}
+                color="text.heading"
                 onClick={() => onSelectGenre(genre)}
                 fontSize="md"
                 variant="link"
-                _hover={{ bg: useColorModeValue("gray.100", "gray.700") }}
+                _hover={{ bg: "surface" }}
               >
                 {t(`${genre.name.toLowerCase()}.message`)}
               </Button>

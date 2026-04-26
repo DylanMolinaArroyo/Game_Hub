@@ -1,69 +1,55 @@
-import { Button, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
+import { Button, Flex, HStack, Icon, Menu, MenuButton, MenuItem, MenuList, Text } from "@chakra-ui/react";
+import { BsChevronDown } from "react-icons/bs";
 import i18next from "i18next";
 import { FlagIcon, FlagIconCode } from "react-flag-kit";
 import { TbWorld } from "react-icons/tb";
 import { useTranslation } from "react-i18next";
 
-interface LanguageSwitchProps {
-  onClick?: () => void;
-}
+const languages: { code: FlagIconCode; lng: string; labelKey: string }[] = [
+  { code: "US", lng: "en", labelKey: "language_english.message" },
+  { code: "ES", lng: "es", labelKey: "language_spanish.message" },
+];
 
-const LanguageSwitch: React.FC<LanguageSwitchProps> = ({ onClick }) => {
-  const languages = [
-    {
-      code: "US" as FlagIconCode,
-      name: "English",
-    },
-    {
-      code: "ES" as FlagIconCode,
-      name: "Spanish",
-    },
-  ];
-
-  const changeLanguage = (lng: string | undefined) => {
-    i18next.changeLanguage(lng);
-    if (onClick) onClick();
-  };
-
+const LanguageSwitch = () => {
   const { t } = useTranslation();
 
   return (
-    <Menu>
-      <MenuButton
-        as={Button}
-        padding="auto"
-        background="inherit"
-        leftIcon={<TbWorld size="20px" />}
-        fontSize={["xs", "sm", "md"]}
-        px={[2, 3, 4]}
-        py={[1, 2, 2]}
-        minWidth="120px"
-        textOverflow="ellipsis"
-        whiteSpace="nowrap"
-        overflow="hidden"
-        textAlign="left"
-        style={{ paddingLeft: "8px", paddingRight: "12px" }}
-        w="100%"
-      >
-        {t("languages.message")}
-      </MenuButton>
-      <MenuList w="100%">
-        {languages.map((language) => (
-          <MenuItem
-            key={language.code}
-            onClick={() => changeLanguage(language.code)}
-            fontSize={["xs", "sm"]}
-          >
-            <FlagIcon
-              code={language.code}
-              size={18}
-              style={{ marginRight: "6px" }}
-            />
-            {t(`language_${language.name.toLowerCase()}.message`)}
-          </MenuItem>
-        ))}
-      </MenuList>
-    </Menu>
+    <Flex align="center" justify="space-between" w="100%" px={2} py={3}>
+      <HStack spacing={3}>
+        <Icon as={TbWorld} boxSize="1.2em" />
+        <Text fontWeight="medium">{t("languages.message")}</Text>
+      </HStack>
+      <Menu placement="bottom-end">
+        <MenuButton
+          as={Button}
+          size="sm"
+          variant="outline"
+          rightIcon={<BsChevronDown />}
+        >
+          <FlagIcon
+            code={
+              languages.find((l) => l.lng === i18next.language)?.code ?? "US"
+            }
+            size={16}
+          />
+        </MenuButton>
+        <MenuList minW="140px">
+          {languages.map((lang) => (
+            <MenuItem
+              key={lang.code}
+              onClick={() => i18next.changeLanguage(lang.lng)}
+            >
+              <FlagIcon
+                code={lang.code}
+                size={16}
+                style={{ marginRight: "8px" }}
+              />
+              {t(lang.labelKey)}
+            </MenuItem>
+          ))}
+        </MenuList>
+      </Menu>
+    </Flex>
   );
 };
 

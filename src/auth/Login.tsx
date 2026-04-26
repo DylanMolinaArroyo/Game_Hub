@@ -17,14 +17,11 @@ import {
   Input,
   Stack,
   Text,
-  useColorModeValue,
 } from "@chakra-ui/react";
 import { FcGoogle } from "react-icons/fc";
 import { useTranslation } from "react-i18next";
 
 function Login() {
-  const headingColor = useColorModeValue("gray.700", "whiteAlpha.900");
-
   const auth = getAuth();
   const navigate = useNavigate();
 
@@ -71,20 +68,20 @@ function Login() {
     >
       <Center h="100vh">
         <Box
-          w="50%"
+          w={{ base: "92%", sm: "75%", md: "50%" }}
           bg="#1a1a1a"
-          p={10}
+          p={{ base: 6, md: 10 }}
           flexDirection="column"
           justifyContent="center"
           borderRadius={15}
           maxW="400px"
         >
-          <Box maxW="300px" mx="auto">
+          <Box maxW="100%" mx="auto">
             <Heading
               as="h3"
               size="xl"
               mb={2}
-              color={headingColor}
+              color="text.heading"
               textAlign="center"
             >
               {t("login_title.message")}
@@ -121,7 +118,7 @@ function Login() {
             <Button
               onClick={signInWithEmail}
               isLoading={authing}
-              color={headingColor}
+              color="text.heading"
               w="100%"
               px={2}
               py={2}

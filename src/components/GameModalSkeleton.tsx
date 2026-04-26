@@ -1,102 +1,78 @@
 import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalBody,
-  HStack,
-  Heading,
-  Skeleton,
-  SkeletonCircle,
-  SkeletonText,
+  Box,
+  Divider,
   Grid,
   GridItem,
-  VStack,
-  Divider,
-  Box,
-  Center,
+  HStack,
+  Skeleton,
+  SkeletonText,
 } from "@chakra-ui/react";
 
-interface Props {
-  isOpen: boolean;
-  onClose: () => void;
-}
+const GameModalSkeleton = () => (
+  <Box>
+    <HStack px={4} py={3} mb={1}>
+      <Skeleton height="24px" width="55%" />
+    </HStack>
 
-const GameModalSkeleton = ({ isOpen, onClose }: Props) => {
-  return (
-    <Modal isOpen={isOpen} onClose={onClose} isCentered>
-      <ModalOverlay />
-      <ModalContent maxWidth="60vw" borderRadius="md" overflow="hidden">
-        <ModalBody padding={2}>
-          <HStack padding={4} bg="normal" color="gray.700" marginBottom={1}>
-            <Skeleton height="20px" width="150px" />
-            <SkeletonCircle size="10" />
+    <Box borderRadius="md" p={3} mb={4}>
+      <Grid templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }} gap={4}>
+        <GridItem>
+          <Skeleton height={{ base: "200px", md: "340px" }} borderRadius="md" />
+        </GridItem>
+        <GridItem>
+          <Skeleton height="28px" width="70%" mb={4} />
+          <HStack mb={4} spacing={3}>
+            <Skeleton height="60px" width="80px" borderRadius="md" />
+            <Skeleton height="60px" width="80px" borderRadius="md" />
           </HStack>
-          <Skeleton padding={3} marginBottom={4}>
-            <Grid templateColumns="repeat(2, 1fr)" gap={4}>
-              <GridItem>
-                <Skeleton height="400px" borderRadius="md" />
-              </GridItem>
-              <GridItem>
-                <Skeleton height="30px" marginBottom={4} />
-                <Skeleton height="20px" marginBottom={2} />
-                <Skeleton height="20px" marginBottom={2} />
-                <Skeleton height="20px" marginBottom={4} />
-                <Skeleton height="20px" />
-              </GridItem>
-            </Grid>
-          </Skeleton>
-          <Heading size="md" color="gray.700" marginBottom={2}>
-            Platforms
-          </Heading>
-          <Skeleton height="30px" width="200px" />
-          <Center height="20px">
-            <Divider
-              orientation="horizontal"
-              borderWidth="2px"
-              width="full"
-              color="gray.700"
-            />
-          </Center>
-          <GridItem colSpan={2}>
-            <Skeleton height="400px" width="100%" />
-          </GridItem>
-          <HStack overflowX="scroll" overscrollBehaviorX="revert" paddingY={4}>
-            <HStack paddingX={"10px"}>
-              <Skeleton
-                height="150px"
-                width="150px"
-                borderRadius="md"
-                marginX={2}
-              />
-              <Skeleton
-                height="150px"
-                width="150px"
-                borderRadius="md"
-                marginX={2}
-              />
-            </HStack>
+          <Skeleton height="18px" width="50%" mb={2} />
+          <Skeleton height="16px" width="40%" mb={4} />
+          <Skeleton height="18px" width="35%" mb={2} />
+          <HStack spacing={2} mb={4}>
+            <Skeleton height="16px" width="80px" borderRadius="full" />
+            <Skeleton height="16px" width="80px" borderRadius="full" />
           </HStack>
-          <VStack spacing={4} align="stretch" marginTop={4}>
-            <Center height="20px">
-              <Divider
-                orientation="horizontal"
-                borderWidth="2px"
-                width="full"
-                color="gray.700"
-              />
-            </Center>
-            <Box>
-              <Heading size="md" color="gray.700" marginBottom={2}>
-                Description
-              </Heading>
-              <SkeletonText mt="4" noOfLines={4} spacing="4" />
-            </Box>
-            <Divider orientation="horizontal" borderWidth="2px" width="full" />
-          </VStack>
-        </ModalBody>
-      </ModalContent>
-    </Modal>
-  );
-};
+          <Skeleton height="16px" width="45%" />
+        </GridItem>
+      </Grid>
+    </Box>
+
+    <Skeleton height="18px" width="70px" mb={2} />
+    <HStack mb={3} spacing={2} flexWrap="wrap">
+      {Array(4)
+        .fill(null)
+        .map((_, i) => (
+          <Skeleton key={i} height="28px" width="80px" borderRadius="full" />
+        ))}
+    </HStack>
+
+    <Divider mb={3} />
+
+    <Skeleton
+      height={{ base: "180px", md: "320px" }}
+      borderRadius="md"
+      mb={3}
+    />
+
+    <HStack spacing={2} pb={4} overflowX="hidden">
+      {Array(4)
+        .fill(null)
+        .map((_, i) => (
+          <Skeleton
+            key={i}
+            height={{ base: "60px", md: "80px" }}
+            minW={{ base: "90px", md: "120px" }}
+            borderRadius="md"
+            flexShrink={0}
+          />
+        ))}
+    </HStack>
+
+    <Divider mb={3} />
+
+    <Skeleton height="18px" width="90px" mb={3} />
+    <SkeletonText noOfLines={4} spacing="3" skeletonHeight="14px" />
+  </Box>
+);
 
 export default GameModalSkeleton;
